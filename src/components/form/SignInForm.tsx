@@ -11,7 +11,7 @@ type Inputs = {
   password: string
 }
 
-const Form: FC<FormProps> = ({ title, getDataForm }) => {
+const SignInForm: FC<FormProps> = ({ title, getDataForm }) => {
   const { register, handleSubmit, reset } = useForm<Inputs>({
     mode: "onChange"
   })
@@ -59,4 +59,4 @@ const Form: FC<FormProps> = ({ title, getDataForm }) => {
   )
 }
 
-export default Form
+export default SignInForm

@@ -16,12 +16,12 @@ module.exports = {
     "prettier/prettier": [
       "error",
       {
-        endOfLine: "auto",
-      },
+        singleQuote: false,
+        endOfLine: "auto"
+      }
     ],
     // 충돌이 일어나는 부분 비활성화
     "arrow-body-style": "off",
-    "prefer-arrow-callback": "off",
-  },
-};
-
+    "react/react-in-jsx-scope": "off"
+  }
+}

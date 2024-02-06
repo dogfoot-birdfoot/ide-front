@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react"
 
 const IDE = () => {
-  return (
-    <div>IDE</div>
-  )
+  return <div>IDE</div>
 }
 
 export default IDE
