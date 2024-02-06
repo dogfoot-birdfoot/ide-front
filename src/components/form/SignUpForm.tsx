@@ -11,7 +11,7 @@ type Inputs = {
   password: string
 }
 
-const Form: FC<FormProps> = ({ title, getDataForm }) => {
+const SignUpForm: FC<FormProps> = ({ title, getDataForm }) => {
   const { register, handleSubmit, reset } = useForm<Inputs>({
     mode: "onChange"
   })
@@ -43,7 +43,6 @@ const Form: FC<FormProps> = ({ title, getDataForm }) => {
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-
       <div>
         <input
           type="password"
@@ -52,6 +51,15 @@ const Form: FC<FormProps> = ({ title, getDataForm }) => {
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
+      <div>
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          {...register("password", userPassword)}
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
       <button type="submit" className="w-full px-4 py-2 bg-lime-600 text-white rounded-md hover:bg-lime-700">
         {title}
       </button>
@@ -59,4 +67,4 @@ const Form: FC<FormProps> = ({ title, getDataForm }) => {
   )
 }
 
-export default Form
+export default SignUpForm
