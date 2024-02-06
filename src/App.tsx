@@ -9,17 +9,15 @@ import IDE from "./pages/IDE";
 function App() {
   return (
     <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Welcome />}></Route>
-          <Route path="/welcome" element={<Welcome />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/container" element={<Container />}></Route>
-          <Route path="/ide" element={<IDE />}></Route>
-        </Routes>
+      <Routes>
+        <Route path="/" element={<Welcome />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
+        <Route path="/container" element={<Container />}></Route>
+        <Route path="/ide" element={<IDE />}></Route>
+      </Routes>
     </BrowserRouter>
   );
-  
 }
 
 export default App;
