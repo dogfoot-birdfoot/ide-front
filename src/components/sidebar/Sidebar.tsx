@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { SidebarProps } from "../../type"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons"
 import { faRocket } from "@fortawesome/free-solid-svg-icons"
+import { SidebarProps } from "type"
 
 const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail, containers }) => {
   const [isSpaceExpanded, setIsSpaceExpanded] = useState(true)

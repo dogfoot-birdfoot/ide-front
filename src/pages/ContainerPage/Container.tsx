@@ -35,6 +35,7 @@ const ContainerPage = () => {
 
   return (
     <div className="flex min-h-screen">
+      {/* userName 및 useEmail은 prop으로 받아와서 동적으로 생성예정 */}
       <Sidebar userName="홍길동" userEmail="hong@example.com" containers={containers} />
       <div className="flex-grow p-4">
         <Header onAddContainer={addNewContainer} />
