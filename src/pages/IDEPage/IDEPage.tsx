@@ -4,8 +4,8 @@ import React from "react"
 
 const IDEPage = () => {
   return (
-    <div className="flex h-screen">
-      <div className="w-1/5 bg-gray-700 p-4">
+    <div className="flex bg-customGray">
+      <div className="w-1/5 bg-customGray p-4 border-r ">
         <FileTree />
       </div>
       <div className="w-3/4 p-4">

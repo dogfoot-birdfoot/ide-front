@@ -1,13 +1,12 @@
 import { InteractionMode } from "react-complex-tree"
 import { StaticTreeDataProvider, Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
-import { TreeItem } from "../../../type"
+import { TreeItem } from "type"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileCirclePlus, faFolderPlus } from "@fortawesome/free-solid-svg-icons" // 필요한 아이콘을 가져옵니다.
 import { useState } from "react"
 import { renderers } from "./renderers"
-import React from "react"
 
-export default function FileTree() {
+export default function FileTree2() {
   const [items, setItems] = useState<Record<string, TreeItem>>({
     root: {
       index: "root",
@@ -41,55 +40,102 @@ export default function FileTree() {
     data: newName
   }))
 
-  const injectItem = () => {
-    const newItemIndex = `item_${Math.random()}`
-    const newItem = {
-      index: newItemIndex,
-      children: [],
-      data: "New Item"
-    }
+  // const injectItem = () => {
+  //   const newItemIndex = `item_${Math.random()}`
+  //   const newItem = {
+  //     index: newItemIndex,
+  //     children: [],
+  //     data: "New Item"
+  //   }
 
-    // 선택된 폴더에 새 아이템을 추가
-    const updatedItems = {
-      ...items,
-      [newItemIndex]: newItem,
-      [targetFolderId]: {
-        ...items[targetFolderId],
-        children: [...items[targetFolderId].children, newItemIndex]
+  //   // 선택된 폴더에 새 아이템을 추가
+  //   const updatedItems = {
+  //     ...items,
+  //     [newItemIndex]: newItem,
+  //     [targetFolderId]: {
+  //       ...items[targetFolderId],
+  //       children: [...items[targetFolderId].children, newItemIndex]
+  //     }
+  //   }
+
+  //   // 데이터 공급자에 변경 사항을 알림
+  //   dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
+
+  //   // items 상태 업데이트
+  //   setItems(updatedItems)
+  // }
+
+  // const injectFolder = () => {
+  //   const newFolderIndex = `folder_${Math.random()}`
+  //   const newFolder = {
+  //     index: newFolderIndex,
+  //     isFolder: true,
+  //     children: [],
+  //     data: "New Folder"
+  //   }
+
+  //   // 선택된 폴더에 새 폴더를 추가
+  //   const updatedItems = {
+  //     ...items,
+  //     [newFolderIndex]: newFolder,
+  //     [targetFolderId]: {
+  //       ...items[targetFolderId],
+  //       children: [...items[targetFolderId].children, newFolderIndex]
+  //     }
+  //   }
+
+  //   // 데이터 공급자에 변경 사항을 알림
+  //   dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
+
+  //   // items 상태 업데이트
+  //   setItems(updatedItems)
+  // }
+
+  const injectItem = () => {
+    setItems(currentItems => {
+      const newItemIndex = `item_${Math.random()}`
+      const newItem = {
+        index: newItemIndex,
+        children: [],
+        data: "New Item"
       }
-    }
+
+      return {
+        ...currentItems,
+        [newItemIndex]: newItem,
+        [targetFolderId]: {
+          ...currentItems[targetFolderId],
+          children: [...currentItems[targetFolderId].children, newItemIndex]
+        }
+      }
+    })
 
     // 데이터 공급자에 변경 사항을 알림
     dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
-
-    // items 상태 업데이트
-    setItems(updatedItems)
   }
 
   const injectFolder = () => {
-    const newFolderIndex = `folder_${Math.random()}`
-    const newFolder = {
-      index: newFolderIndex,
-      isFolder: true,
-      children: [],
-      data: "New Folder"
-    }
-
-    // 선택된 폴더에 새 폴더를 추가
-    const updatedItems = {
-      ...items,
-      [newFolderIndex]: newFolder,
-      [targetFolderId]: {
-        ...items[targetFolderId],
-        children: [...items[targetFolderId].children, newFolderIndex]
+    setItems(currentItems => {
+      const newFolderIndex = `folder_${Math.random()}`
+      const newFolder = {
+        index: newFolderIndex,
+        isFolder: true,
+        children: [],
+        data: "New Folder"
       }
-    }
+
+      return {
+        ...currentItems,
+        [newFolderIndex]: newFolder,
+        [targetFolderId]: {
+          ...currentItems[targetFolderId],
+          children: [...currentItems[targetFolderId].children, newFolderIndex]
+        }
+      }
+    })
 
     // 데이터 공급자에 변경 사항을 알림
     dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
-
-    // items 상태 업데이트
-    setItems(updatedItems)
   }
 
   return (

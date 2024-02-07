@@ -107,12 +107,25 @@ export const renderers: TreeRenderProps = {
   // },
 
   renderItem: props => (
+    // <li
+    //   className={cx(
+    //     Classes.TREE_NODE,
+    //     (props.context.isSelected || props.context.isDraggingOver) && Classes.TREE_NODE_SELECTED
+    //   )}
+    //   style={{ marginBottom: "8px" }}
+    //   {...(props.context.itemContainerWithChildrenProps as any)}
+    // >
+
     <li
       className={cx(
         Classes.TREE_NODE,
-        (props.context.isSelected || props.context.isDraggingOver) && Classes.TREE_NODE_SELECTED
+        (props.context.isSelected || props.context.isDraggingOver) && Classes.TREE_NODE_SELECTED,
+        props.context.isDraggingOver && "drag-over" // 'drag-over' 클래스는 드래그 오버 시의 스타일을 정의합니다.
       )}
-      style={{ marginBottom: "8px" }}
+      style={{
+        marginBottom: "8px",
+        ...(props.context.isDraggingOver ? { border: "2px dashed #aaa", padding: "4px" } : {}) // 드래그 오버 시 인라인 스타일 변경
+      }}
       {...(props.context.itemContainerWithChildrenProps as any)}
     >
       <div
