@@ -1,12 +1,12 @@
-import { InteractionMode } from "react-complex-tree"
-import { StaticTreeDataProvider, Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
-import { TreeItem } from "type"
+import { InteractionMode, Tree } from "react-complex-tree"
+import { StaticTreeDataProvider, UncontrolledTreeEnvironment, TreeItemIndex } from "react-complex-tree"
+import { FileTreeProps, TreeItem } from "type"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFileCirclePlus, faFolderPlus } from "@fortawesome/free-solid-svg-icons" // 필요한 아이콘을 가져옵니다.
+import { faFileCirclePlus, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 import { renderers } from "./renderers"
 
-export default function FileTree2() {
+export default function FileTree({ onFileSelect }: FileTreeProps) {
   const [items, setItems] = useState<Record<string, TreeItem>>({
     root: {
       index: "root",
@@ -16,8 +16,10 @@ export default function FileTree2() {
     },
     child1: {
       index: "child1",
+      isFolder: false,
       children: [],
-      data: "Child item 1"
+      data: "Child item 1",
+      content: "// Content of Child item 1\nconsole.log('Hello from Child item 1');"
     },
     child2: {
       index: "child2",
@@ -27,12 +29,13 @@ export default function FileTree2() {
     },
     child3: {
       index: "child3",
+      isFolder: false,
       children: [],
-      data: "Child item 3"
+      data: "Child item 3",
+      content: "// Content of Child item 3\nconsole.log('Hello from Child item 3');"
     }
   })
 
-  // targetFolderId 상태 추가 및 초기값 설정
   const [targetFolderId, setTargetFolderId] = useState<string>("root")
 
   const dataProvider = new StaticTreeDataProvider(items, (item, newName) => ({
@@ -40,64 +43,26 @@ export default function FileTree2() {
     data: newName
   }))
 
-  // const injectItem = () => {
-  //   const newItemIndex = `item_${Math.random()}`
-  //   const newItem = {
-  //     index: newItemIndex,
-  //     children: [],
-  //     data: "New Item"
-  //   }
-
-  //   // 선택된 폴더에 새 아이템을 추가
-  //   const updatedItems = {
-  //     ...items,
-  //     [newItemIndex]: newItem,
-  //     [targetFolderId]: {
-  //       ...items[targetFolderId],
-  //       children: [...items[targetFolderId].children, newItemIndex]
-  //     }
-  //   }
-
-  //   // 데이터 공급자에 변경 사항을 알림
-  //   dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
-
-  //   // items 상태 업데이트
-  //   setItems(updatedItems)
-  // }
-
-  // const injectFolder = () => {
-  //   const newFolderIndex = `folder_${Math.random()}`
-  //   const newFolder = {
-  //     index: newFolderIndex,
-  //     isFolder: true,
-  //     children: [],
-  //     data: "New Folder"
-  //   }
-
-  //   // 선택된 폴더에 새 폴더를 추가
-  //   const updatedItems = {
-  //     ...items,
-  //     [newFolderIndex]: newFolder,
-  //     [targetFolderId]: {
-  //       ...items[targetFolderId],
-  //       children: [...items[targetFolderId].children, newFolderIndex]
-  //     }
-  //   }
-
-  //   // 데이터 공급자에 변경 사항을 알림
-  //   dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
-
-  //   // items 상태 업데이트
-  //   setItems(updatedItems)
-  // }
+  const handleSelect = (selectedItemIndexes: TreeItemIndex[]) => {
+    selectedItemIndexes.forEach(selectedItemIndex => {
+      const selectedItem = items[selectedItemIndex] // 선택된 항목의 데이터
+      if (selectedItem && !selectedItem.isFolder) {
+        // 파일일 때만 처리. content가 존재하는 경우에만 처리
+        console.log("Selecting file to open in tab:", selectedItem.data) // 디버깅을 위한 로그
+        onFileSelect(selectedItem?.data, selectedItem?.content) // 파일 제목과 내용을 전달하여 탭 열기
+      }
+    })
+  }
 
   const injectItem = () => {
     setItems(currentItems => {
       const newItemIndex = `item_${Math.random()}`
       const newItem = {
         index: newItemIndex,
+        isFolder: false,
         children: [],
-        data: "New Item"
+        data: "New Item",
+        content: "" // 빈 문자열로 content 추가
       }
 
       return {
@@ -149,6 +114,7 @@ export default function FileTree2() {
       defaultInteractionMode={InteractionMode.ClickItemToExpand}
       onRenameItem={(item, name) => alert(`${item.data} renamed to ${name}`)}
       {...renderers}
+      onSelectItems={handleSelect}
     >
       <div className="flex justify-between space-x-2 mb-7 items-center mt-3">
         <h3 className="text-2xl text-white">Project</h3>

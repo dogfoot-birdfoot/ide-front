@@ -22,4 +22,18 @@ export type TreeItem = {
   isFolder?: boolean
   children: string[]
   data: string
+  content?: string
+}
+
+export interface FileTreeProps {
+  onFileSelect: (fileName: string, fileContent: string) => void // onFileSelect 함수 타입 정의
+}
+
+export interface EditorProps {
+  fileTabs: {
+    activeFile: string
+    fileContents: { [fileName: string]: string }
+    activeTabIndex: number
+  }[]
+  activeTabIndex: number
 }
