@@ -4,33 +4,31 @@ import FileTree from "@/components/editor/filetree/FileTree"
 import { EditorProps } from "type"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
+import data from "data.json"
+import { DataStructure } from "type"
 
 const IDEPage = () => {
-  const [tabs, setTabs] = useState<EditorProps["fileTabs"]>([]) // 열린 탭들의 상태
-  const [activeTabIndex, setActiveTabIndex] = useState<EditorProps["activeTabIndex"]>(-1) // 현재 활성화된 탭의 인덱스
-
-  // 서버랑 연동하면 없어질 하드코딩 부분
-  const fileContents: { [fileName: string]: string } = {
-    "file1.js": "// File 1 content\nconsole.log('File 1');",
-    "file2.js": "// File 2 content\nconsole.log('File 2');"
-  }
+  const typedData: DataStructure = data
+  const [tabs, setTabs] = useState<EditorProps["fileTabs"]>([])
+  const [activeTabIndex, setActiveTabIndex] = useState<EditorProps["activeTabIndex"]>(-1)
 
   const handleFileSelect = (fileName: string) => {
-    // 매개변수 수정
-    const fileContent = fileContents[fileName] || "" // 파일이 없을 경우를 대비해 기본값 설정
+    const fileItem = typedData.files[fileName] // data.json에서 파일 항목 가져오기
+    const fileContent = fileItem?.content || "" // 파일 내용 가져오기, 없으면 빈 문자열 사용
+
     const fileIndex = tabs.findIndex(tab => tab.activeFile === fileName)
+
     if (fileIndex !== -1) {
-      // 파일이 이미 열린 탭에 있다면 해당 탭을 활성화
-      setActiveTabIndex(tabs[fileIndex].activeTabIndex)
+      setActiveTabIndex(fileIndex) // 파일이 이미 열린 탭에 있다면 해당 탭을 활성화
     } else {
-      // 새 탭 추가
       const newTab = {
+        // 새 탭 추가
         activeFile: fileName,
-        fileContents: typeof fileContent === "string" ? { [fileName]: fileContent } : fileContent,
+        fileContents: { [fileName]: fileContent }, // 파일 내용 설정
         activeTabIndex: tabs.length
       }
-      setTabs([...tabs, newTab])
-      setActiveTabIndex(newTab.activeTabIndex) // 새 탭을 활성화
+      setTabs([...tabs, newTab]) // 상태 업데이트
+      setActiveTabIndex(tabs.length) // 새로운 탭 인덱스로 설정
     }
   }
 

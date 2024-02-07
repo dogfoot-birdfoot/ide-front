@@ -17,16 +17,8 @@ export type ContainerFormProps = {
   name: string
 }
 
-export type TreeItem = {
-  index: string
-  isFolder?: boolean
-  children: string[]
-  data: string
-  content?: string
-}
-
 export interface FileTreeProps {
-  onFileSelect: (fileName: string, fileContent: string) => void // onFileSelect 함수 타입 정의
+  onFileSelect: (fileName: string, fileContent: string) => void
 }
 
 export interface EditorProps {
@@ -36,4 +28,20 @@ export interface EditorProps {
     activeTabIndex: number
   }[]
   activeTabIndex: number
+}
+
+export interface FileItem {
+  index: string
+  isFolder: boolean
+  children: string[]
+  data: string
+  content?: string
+}
+
+export interface FileCollection {
+  [key: string]: FileItem // 문자열 키로 FileItem에 접근 가능
+}
+
+export interface DataStructure {
+  files: FileCollection
 }
