@@ -1,7 +1,8 @@
+import ChatModal from "@/components/modal/ChatModal"
 import React from "react"
 
 const ContainerPage = () => {
-  return <div>ContainerPage</div>
+  return <ChatModal></ChatModal>
 }
 
 export default ContainerPage
