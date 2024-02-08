@@ -1,27 +1,94 @@
-import { InteractionMode, Tree, TreeItemIndex } from "react-complex-tree"
+import { InteractionMode, Tree, TreeItemIndex, TreeItem, CustomTreeItem } from "react-complex-tree"
 import { StaticTreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
-import { FileTreeProps } from "type"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileCirclePlus, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
-import { useState } from "react"
+import axios from "axios"
+import React, { useEffect, useState } from "react"
+import { FileItem, FileTreeProps } from "type"
 import { renderers } from "./renderers"
-import data from "data.json"
-import { DataStructure } from "type"
 
-export default function FileTree({ onFileSelect }: FileTreeProps) {
-  const typedData: DataStructure = data
-  const [items, setItems] = useState(data.files)
-  const [targetFolderId, setTargetFolderId] = useState<string>("root")
-  const dataProvider = new StaticTreeDataProvider(items, (item, newName) => ({
-    ...item,
-    data: newName
-  }))
+const FileTree: React.FC<FileTreeProps> = ({ onFileSelect }) => {
+  const [name, setName] = useState<string>("")
+  const [showInputForItem, setShowInputForItem] = useState<boolean>(false)
+  const [showInputForFolder, setShowInputForFolder] = useState<boolean>(false)
+  const [fileItems, setFileItems] = useState<FileItem[]>([])
 
-  const handleSelect = (selectedItemIndexes: TreeItemIndex[], treeId: string) => {
-    selectedItemIndexes.forEach(selectedItemIndex => {
-      if (typeof selectedItemIndex === "string") {
-        // 타입 가드를 사용하여 string인지 확인
-        const selectedItem = items[selectedItemIndex]
+  useEffect(() => {
+    fetchFiles()
+  }, [])
+
+  const fetchFiles = async () => {
+    try {
+      const response = await axios.get<FileItem[]>("http://localhost:3001/files")
+      console.log("전체 데이터 페치해옴", response.data)
+      setFileItems(response.data)
+    } catch (error) {
+      console.error("전체 데이터 페치못해옴", error)
+    }
+  }
+
+  const injectItem = () => {
+    setShowInputForItem(true)
+  }
+
+  const injectFolder = () => {
+    setShowInputForFolder(true)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value)
+  }
+
+  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>, callback: () => void) => {
+    if (e.key === "Enter") {
+      callback()
+    }
+  }
+
+  const injectName = () => {
+    axios
+      .post("http://localhost:3001/files", {
+        name: name,
+        isFolder: false,
+        children: [],
+        data: "New Item",
+        content: ""
+      })
+      .then(response => {
+        fetchFiles()
+        console.log("파일 추가하고 전체 목록 받아왔어용")
+        setShowInputForItem(false)
+        setName("")
+      })
+      .catch(error => {
+        console.error("파일 추가 중 오류 발생:", error)
+      })
+  }
+
+  const injectFolderName = () => {
+    axios
+      .post("http://localhost:3001/files", {
+        name: name,
+        isFolder: true,
+        children: [],
+        data: "New Folder",
+        content: ""
+      })
+      .then(response => {
+        fetchFiles()
+        console.log("폴더 추가하고 전체 목록 받아왔어용")
+        setShowInputForFolder(false)
+        setName("")
+      })
+      .catch(error => {
+        console.error("폴더 추가 중 오류 발생:", error)
+      })
+  }
+
+  const handleSelect = (selectedItemNames: TreeItemIndex[], treeId: string) => {
+    selectedItemNames.forEach(selectedItemName => {
+      if (typeof selectedItemName === "string") {
+        const selectedItem = Object.values(items).filter(item => item.name === selectedItemName)[0] // Object.values()를 사용하여 배열로 변환
         if (selectedItem && !selectedItem.isFolder) {
           console.log("Selecting file to open in tab:", selectedItem.data)
           onFileSelect(selectedItem.data, selectedItem.content || "")
@@ -30,52 +97,22 @@ export default function FileTree({ onFileSelect }: FileTreeProps) {
     })
   }
 
-  const injectItem = () => {
-    setItems(currentItems => {
-      const newItemIndex = `item_${Math.random()}`
-      const newItem = {
-        index: newItemIndex,
-        isFolder: false,
-        children: [],
-        data: "New Item",
-        content: ""
-      }
+  const items: Record<TreeItemIndex, CustomTreeItem<string>> = {}
 
-      return {
-        ...currentItems,
-        [newItemIndex]: newItem,
-        [targetFolderId]: {
-          ...currentItems[targetFolderId],
-          children: [...currentItems[targetFolderId].children, newItemIndex]
-        }
-      }
-    })
+  fileItems.forEach(item => {
+    items[item.name] = {
+      data: item.data,
+      children: item.children,
+      isFolder: item.isFolder,
+      name: item.name,
+      index: item.name
+    }
+  })
 
-    dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
-  }
-
-  const injectFolder = () => {
-    setItems(currentItems => {
-      const newFolderIndex = `folder_${Math.random()}`
-      const newFolder = {
-        index: newFolderIndex,
-        isFolder: true,
-        children: [],
-        data: "New Folder"
-      }
-
-      return {
-        ...currentItems,
-        [newFolderIndex]: newFolder,
-        [targetFolderId]: {
-          ...currentItems[targetFolderId],
-          children: [...currentItems[targetFolderId].children, newFolderIndex]
-        }
-      }
-    })
-
-    dataProvider.onDidChangeTreeDataEmitter.emit([targetFolderId])
-  }
+  const dataProvider = new StaticTreeDataProvider(items, (item, newName) => ({
+    ...item,
+    data: newName
+  }))
 
   return (
     <UncontrolledTreeEnvironment
@@ -86,21 +123,51 @@ export default function FileTree({ onFileSelect }: FileTreeProps) {
       canDropOnFolder={true}
       canReorderItems={true}
       defaultInteractionMode={InteractionMode.ClickItemToExpand}
-      onRenameItem={(item, name) => alert(`${item.data} renamed to ${name}`)}
-      {...renderers}
+      onRenameItem={(item, newName) => alert(`${item.data} renamed to ${newName}`)}
       onSelectItems={handleSelect}
+      {...renderers}
     >
       <div className="flex justify-between space-x-2 mb-7 items-center mt-3">
         <h3 className="text-2xl text-white">Project</h3>
-        <div>
-          <button type="button" onClick={injectItem} className="icon-button p-2 text-white hover:text-lime-400 mr-3">
-            <FontAwesomeIcon icon={faFileCirclePlus} />
-          </button>
-          <button type="button" onClick={injectFolder} className="icon-button p-2 text-white hover:text-lime-400">
-            <FontAwesomeIcon icon={faFolderPlus} />
-          </button>
-        </div>
+
+        <button type="button" onClick={injectItem} className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded-md">
+          <FontAwesomeIcon icon={faFileCirclePlus} />
+        </button>
+        <button
+          type="button"
+          onClick={injectFolder}
+          className="p-2 text-white bg-green-500 hover:bg-green-600 rounded-md"
+        >
+          <FontAwesomeIcon icon={faFolderPlus} />
+        </button>
+
+        {showInputForItem && (
+          <div>
+            <input
+              type="text"
+              value={name}
+              onChange={handleInputChange}
+              onKeyPress={e => handleInputKeyPress(e, injectName)} // 엔터를 누르면 injectName 함수 호출
+              placeholder="이름 입력 후 엔터를 누르세요."
+              className="p-2 border rounded-md"
+            />
+          </div>
+        )}
+
+        {showInputForFolder && (
+          <div>
+            <input
+              type="text"
+              value={name}
+              onChange={handleInputChange}
+              onKeyPress={e => handleInputKeyPress(e, injectFolderName)} // 엔터를 누르면 injectFolderName 함수 호출
+              placeholder="이름 입력 후 엔터를 누르세요."
+              className="p-2 border rounded-md"
+            />
+          </div>
+        )}
       </div>
+
       <div
         style={{
           color: "#e3e3e3",
@@ -113,3 +180,5 @@ export default function FileTree({ onFileSelect }: FileTreeProps) {
     </UncontrolledTreeEnvironment>
   )
 }
+
+export default FileTree

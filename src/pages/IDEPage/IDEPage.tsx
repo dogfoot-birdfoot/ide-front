@@ -1,23 +1,20 @@
 import React, { useState } from "react"
-import Editor from "@/components/editor/Editor"
-import FileTree from "@/components/editor/filetree/FileTree"
-import { EditorProps } from "type"
+import { EditorProps, FileItem } from "type"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
-import data from "data.json"
-import { DataStructure } from "type"
+import FileTree from "@/components/editor/filetree/FileTree"
+import Editor from "@/components/editor/Editor"
 
 const IDEPage = () => {
-  const typedData: DataStructure = data
+  const [fileItems, setFileItems] = useState<FileItem[]>([])
   const [tabs, setTabs] = useState<EditorProps["fileTabs"]>([])
   const [activeTabIndex, setActiveTabIndex] = useState<EditorProps["activeTabIndex"]>(-1)
 
   const handleFileSelect = (fileName: string) => {
-    const fileItem = typedData.files[fileName] // data.json에서 파일 항목 가져오기
-    const fileContent = fileItem?.content || "" // 파일 내용 가져오기, 없으면 빈 문자열 사용
-
+    const selectedFileItem = fileItems.find(item => item.name === fileName)
+    const fileContent = selectedFileItem?.content || ""
+    console.log("선택된 파일의 내용:", fileContent)
     const fileIndex = tabs.findIndex(tab => tab.activeFile === fileName)
-
     if (fileIndex !== -1) {
       setActiveTabIndex(fileIndex) // 파일이 이미 열린 탭에 있다면 해당 탭을 활성화
     } else {

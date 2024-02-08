@@ -1,0 +1,51 @@
+{
+  "files": [
+    {
+      "id": "root",
+      "name": "root",
+      "isFolder": true,
+      "children": ["file1.js", "folder1"],
+      "data": "Root item"
+    },
+    {
+      "id": "file1.js",
+      "name": "file1.js",
+      "isFolder": false,
+      "children": [],
+      "data": "File 1",
+      "content": "// File 1 content\nconsole.log('File 1');",
+      "lastModified": ""
+    },
+    {
+      "id": "folder1",
+      "name": "folder1",
+      "isFolder": true,
+      "children": ["file2.js"],
+      "data": "Folder 1"
+    },
+    {
+      "id": "file2.js",
+      "name": "file2.js",
+      "isFolder": false,
+      "children": [],
+      "data": "File 2",
+      "content": "// File 2 content\nconsole.log('File 2');"
+    },
+    {
+      "name": "새로운파일",
+      "isFolder": false,
+      "children": [],
+      "data": "New Item",
+      "content": "",
+      "id": "9ooGjQb"
+    },
+    {
+      "name": "새로운파일",
+      "isFolder": false,
+      "children": [],
+      "data": "New Item",
+      "content": "",
+      "id": "J7kUQo3"
+    }
+  ]
+}
