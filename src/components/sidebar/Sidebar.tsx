@@ -3,7 +3,17 @@ import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons"
 import { faRocket } from "@fortawesome/free-solid-svg-icons"
-import { SidebarProps } from "type"
+
+export type SidebarProps = {
+  userName: string
+  userEmail: string
+  containers: Containers
+}
+export type Container = {
+  id: number
+  name: string
+}
+export type Containers = Container[]
 
 const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail, containers }) => {
   const [isSpaceExpanded, setIsSpaceExpanded] = useState(true)

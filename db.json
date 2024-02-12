@@ -1,51 +1,37 @@
 {
-  "files": [
-    {
-      "id": "root",
-      "name": "root",
+  "files": {
+    "root": {
+      "index": "root",
       "isFolder": true,
-      "children": ["file1.js", "folder1"],
-      "data": "Root item"
+      "children": ["uuid-folder1", "uuid-file1"],
+      "data": "Root Directory"
     },
-    {
-      "id": "file1.js",
-      "name": "file1.js",
-      "isFolder": false,
-      "children": [],
-      "data": "File 1",
-      "content": "// File 1 content\nconsole.log('File 1');",
-      "lastModified": ""
-    },
-    {
-      "id": "folder1",
-      "name": "folder1",
+    "uuid-folder1": {
+      "index": "uuid-folder1",
       "isFolder": true,
-      "children": ["file2.js"],
-      "data": "Folder 1"
+      "children": ["uuid-file2", "uuid-file3"],
+      "data": "First Folder"
     },
-    {
-      "id": "file2.js",
-      "name": "file2.js",
+    "uuid-file1": {
+      "index": "uuid-file1",
       "isFolder": false,
       "children": [],
-      "data": "File 2",
-      "content": "// File 2 content\nconsole.log('File 2');"
+      "data": "First File",
+      "content": "Content of the first file."
     },
-    {
-      "name": "새로운파일",
+    "uuid-file2": {
+      "index": "uuid-file2",
       "isFolder": false,
       "children": [],
-      "data": "New Item",
-      "content": "",
-      "id": "9ooGjQb"
+      "data": "Second File",
+      "content": "Content of the second file inside the first folder."
     },
-    {
-      "name": "새로운파일",
+    "uuid-file3": {
+      "index": "uuid-file3",
       "isFolder": false,
       "children": [],
-      "data": "New Item",
-      "content": "",
-      "id": "J7kUQo3"
+      "data": "Third File",
+      "content": "Content of the third file inside the first folder."
     }
-  ]
+  }
 }

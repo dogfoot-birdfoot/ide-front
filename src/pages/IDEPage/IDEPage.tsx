@@ -1,68 +1,84 @@
 import React, { useState } from "react"
-import { EditorProps, FileItem } from "type"
+import FileTree from "../../components/filetree/FileTree"
+import Editor from "../../components/editor/Editor"
+import { ActiveFileProvider, useActiveFile } from "../../context/ActiveFileContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
-import FileTree from "@/components/editor/filetree/FileTree"
-import Editor from "@/components/editor/Editor"
 
 const IDEPage = () => {
-  const [fileItems, setFileItems] = useState<FileItem[]>([])
-  const [tabs, setTabs] = useState<EditorProps["fileTabs"]>([])
-  const [activeTabIndex, setActiveTabIndex] = useState<EditorProps["activeTabIndex"]>(-1)
-
-  const handleFileSelect = (fileName: string) => {
-    const selectedFileItem = fileItems.find(item => item.name === fileName)
-    const fileContent = selectedFileItem?.content || ""
-    console.log("선택된 파일의 내용:", fileContent)
-    const fileIndex = tabs.findIndex(tab => tab.activeFile === fileName)
-    if (fileIndex !== -1) {
-      setActiveTabIndex(fileIndex) // 파일이 이미 열린 탭에 있다면 해당 탭을 활성화
-    } else {
-      const newTab = {
-        // 새 탭 추가
-        activeFile: fileName,
-        fileContents: { [fileName]: fileContent }, // 파일 내용 설정
-        activeTabIndex: tabs.length
-      }
-      setTabs([...tabs, newTab]) // 상태 업데이트
-      setActiveTabIndex(tabs.length) // 새로운 탭 인덱스로 설정
-    }
-  }
-
-  const closeTab = (index: number) => {
-    const newTabs = tabs.filter((_, i) => i !== index)
-    setTabs(newTabs)
-    if (index === activeTabIndex && newTabs.length > 0) {
-      setActiveTabIndex(0) // 첫 번째 탭을 활성화
-    } else if (newTabs.length === 0) {
-      setActiveTabIndex(-1) // 탭이 없으면 활성화된 탭 없음
-    }
-  }
-
   return (
-    <div className="flex bg-customGray">
-      <div className="w-1/5 bg-customGray p-4 border-r">
-        <FileTree onFileSelect={handleFileSelect} />
+    <ActiveFileProvider>
+      <IDEContent />
+    </ActiveFileProvider>
+  )
+}
+
+const IDEContent = () => {
+  const [isFileTreeVisible, setIsFileTreeVisible] = useState(true)
+  const { tabs, setTabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent } = useActiveFile()
+
+  const toggleFileTree = () => {
+    setIsFileTreeVisible(!isFileTreeVisible)
+  }
+  // addTab 함수는 이제 파일의 'data'와 'content'를 받습니다.
+  const addTab = (fileData: string, fileContent: string) => {
+    const isTabOpen = tabs.some(tab => tab.data === fileData)
+    if (!isTabOpen) {
+      setTabs(prevTabs => [...prevTabs, { data: fileData, content: fileContent }])
+    }
+    setActiveFile(fileData) // 파일의 'data'를 활성 파일로 설정합니다.
+    setActiveFileContent(fileContent)
+  }
+
+  const removeTab = (fileData: string) => {
+    setTabs(prevTabs => prevTabs.filter(tab => tab.data !== fileData))
+    if (activeFile === fileData) {
+      setActiveFile("")
+      setActiveFileContent("")
+    }
+  }
+
+  const isTabActive = (fileData: string) => activeFile === fileData
+  return (
+    <div className="flex h-screen bg-slate-600">
+      <div className={`transition-width duration-500 ${isFileTreeVisible ? "w-64" : "w-0"} overflow-auto`}>
+        <FileTree />
       </div>
-      <div className="w-3/4 p-4">
-        <div className="tabs flex bg-customGray">
+
+      <button
+        onClick={toggleFileTree}
+        className="mt-5 ml-[-1.25rem] z-20 p-2 bg-gray-700 text-white  hover:bg-blue-700 transition-transform duration-500"
+        style={{ transform: `translateX(${isFileTreeVisible ? "100%" : "0"})` }}
+      >
+        {isFileTreeVisible ? "«" : "»"}
+      </button>
+
+      <div className="flex-1 overflow-y-auto pl-5 mt-5">
+        <div className="flex ml-1">
           {tabs.map((tab, index) => (
             <div
               key={index}
-              className={`tab flex items-center justify-between px-4 py-2 bg-gray-800 text-white cursor-pointer ${index === activeTabIndex ? "bg-gray-900" : ""}`}
-              onClick={() => setActiveTabIndex(index)}
+              className={`p-2 border ${isTabActive(tab.data) ? "bg-lime-500 text-white" : "bg-gray-700 text-white"}`}
+              onClick={() => {
+                setActiveFile(tab.data)
+                console.log(tab.data)
+                setActiveFileContent(tab.content)
+              }}
             >
-              <span className="mr-4">{tab.activeFile}</span>
-              <button onClick={() => closeTab(index)} className="text-white">
+              {tab.data}
+              <button onClick={() => removeTab(tab.data)} className="ml-3">
                 <FontAwesomeIcon icon={faTimesCircle} />
               </button>
             </div>
           ))}
         </div>
 
-        {tabs.length > 0 && activeTabIndex !== -1 && <Editor fileTabs={tabs} activeTabIndex={activeTabIndex} />}
+        <div className="flex-1">
+          <Editor />
+        </div>
       </div>
     </div>
   )
 }
+
 export default IDEPage
