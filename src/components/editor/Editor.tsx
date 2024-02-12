@@ -11,10 +11,11 @@ import { cpp } from "@codemirror/lang-cpp"
 import { java } from "@codemirror/lang-java"
 import { cppCompletions, javaCompletions, pythonCompletions } from "./autocomplete"
 import axios from "axios"
+import { useFileStructure } from "context/FileStructureContext"
 
 const Editor: React.FC = () => {
   const { activeFile, activeFileContent, setActiveFileContent } = useActiveFile()
-  const [fileStructure, setFileStructure] = useState<any>(null)
+  const { fileStructure, setFileStructure } = useFileStructure()
 
   useEffect(() => {
     const fetchFileStructure = async () => {

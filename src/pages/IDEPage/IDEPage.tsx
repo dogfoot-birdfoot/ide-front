@@ -4,11 +4,14 @@ import Editor from "../../components/editor/Editor"
 import { ActiveFileProvider, useActiveFile } from "../../context/ActiveFileContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
+import { FileStructureProvider } from "context/FileStructureContext"
 
 const IDEPage = () => {
   return (
     <ActiveFileProvider>
-      <IDEContent />
+      <FileStructureProvider>
+        <IDEContent />
+      </FileStructureProvider>
     </ActiveFileProvider>
   )
 }

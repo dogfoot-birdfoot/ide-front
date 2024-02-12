@@ -1,17 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
-import { InteractionMode, Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
+import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-
+type FileStructureChangeCallback = (newFileStructure: any) => void
 class CustomDataProviderImplementation implements TreeDataProvider<any> {
   data: any
   treeChangeListeners: ((changedItemIds: any) => void)[]
-
+  onFileStructureChange: FileStructureChangeCallback | null = null
   constructor(initialData: any) {
     this.data = initialData
     this.treeChangeListeners = []
+    this.onFileStructureChange = null
   }
 
   async getTreeItem(itemId: string | number) {
@@ -62,16 +63,32 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     }
 
     this.treeChangeListeners.forEach(listener => listener([parentId]))
+
+    if (this.onFileStructureChange) {
+      this.onFileStructureChange(this.data)
+    }
+
+    // Send data to localhost:3001
+    axios
+      .post("http://localhost:3001/files", this.data)
+      .then(response => {
+        console.log("Data sent successfully:", response.data)
+      })
+      .catch(error => {
+        console.error("Error sending data:", error)
+      })
   }
 
-  injectFolder(parentId: string | number, name: string) {
+  injectFolder(parentId: string, name: string) {
     this.injectItem(parentId, name, true)
   }
+
+  setOnFileStructureChange(callback: null) {
+    this.onFileStructureChange = callback
+  }
 }
-interface FileTreeProps {
-  saveFileContent: () => Promise<void> // 여기에 saveFileContent 함수 타입을 정의합니다.
-}
-function FileTree({ saveFileContent }: FileTreeProps) {
+
+function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
   const { setActiveFile, setActiveFileContent, addTab, tabs } = useActiveFile()
 
@@ -110,9 +127,6 @@ function FileTree({ saveFileContent }: FileTreeProps) {
           </button>
           <button onClick={injectFolder} className="ml-2 p-1">
             <FontAwesomeIcon icon={faFolderPlus} /> {/* 폴더 추가 아이콘 */}
-          </button>
-          <button onClick={saveFileContent} className="ml-2 p-1">
-            Save {/* 저장 버튼 */}
           </button>
         </div>
       </div>
