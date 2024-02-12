@@ -71,7 +71,7 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
 
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
-  const { setActiveFile, setActiveFileContent, addTab, tabs } = useActiveFile()
+  const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent } = useActiveFile()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,18 +97,6 @@ function FileTree() {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
     dataProvider && dataProvider.injectFolder(parentId, "New Folder")
   }
-
-  useEffect(() => {
-    if (dataProvider) {
-      const dispose = dataProvider.onDidChangeTreeData((changedItemIds: any) => {
-        console.log(changedItemIds)
-      })
-
-      return () => {
-        dispose.dispose()
-      }
-    }
-  }, [dataProvider])
 
   return (
     <div className="ml-5 mt-5 text-white">

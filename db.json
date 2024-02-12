@@ -3,13 +3,19 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": ["uuid-folder1", "uuid-file1"],
+      "children": [
+        "uuid-folder1",
+        "uuid-file1"
+      ],
       "data": "Root Directory"
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": ["uuid-file2", "uuid-file3"],
+      "children": [
+        "uuid-file2",
+        "uuid-file3"
+      ],
       "data": "First Folder"
     },
     "uuid-file1": {
@@ -24,7 +30,7 @@
       "isFolder": false,
       "children": [],
       "data": "Second File",
-      "content": "Content of the second file inside the first folder."
+      "content": "tnwjdgkrl"
     },
     "uuid-file3": {
       "index": "uuid-file3",
