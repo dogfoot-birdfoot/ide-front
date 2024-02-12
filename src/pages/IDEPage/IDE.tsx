@@ -1,7 +1,8 @@
+import ChatButton from "@/components/button/ChatButton"
 import React from "react"
 
 const IDE = () => {
-  return <div>IDE</div>
+  return <ChatButton></ChatButton>
 }
 
 export default IDE
