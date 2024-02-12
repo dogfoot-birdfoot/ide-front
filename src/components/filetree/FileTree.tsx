@@ -68,10 +68,12 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     this.injectItem(parentId, name, true)
   }
 }
-
-function FileTree() {
+interface FileTreeProps {
+  saveFileContent: () => Promise<void> // 여기에 saveFileContent 함수 타입을 정의합니다.
+}
+function FileTree({ saveFileContent }: FileTreeProps) {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
-  const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent } = useActiveFile()
+  const { setActiveFile, setActiveFileContent, addTab, tabs } = useActiveFile()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,6 +110,9 @@ function FileTree() {
           </button>
           <button onClick={injectFolder} className="ml-2 p-1">
             <FontAwesomeIcon icon={faFolderPlus} /> {/* 폴더 추가 아이콘 */}
+          </button>
+          <button onClick={saveFileContent} className="ml-2 p-1">
+            Save {/* 저장 버튼 */}
           </button>
         </div>
       </div>
