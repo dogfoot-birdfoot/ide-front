@@ -10,7 +10,7 @@ export type SidebarProps = {
   containers: Containers
 }
 export type Container = {
-  id: number
+  id: number | string
   name: string
 }
 export type Containers = Container[]

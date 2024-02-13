@@ -3,23 +3,13 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": [
-        "uuid-folder1",
-        "uuid-file1",
-        "0.32270367393368393",
-        "0.6366714927210362",
-        "0.1546219769806585",
-        "0.7344382078580975"
-      ],
+      "children": ["uuid-folder1", "uuid-file1"],
       "data": "Root Directory"
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": [
-        "uuid-file2",
-        "uuid-file3"
-      ],
+      "children": ["uuid-file2", "uuid-file3"],
       "data": "First Folder"
     },
     "uuid-file1": {
@@ -42,22 +32,30 @@
       "children": [],
       "data": "Third File",
       "content": "Content of the third file inside the first folder."
-    },
-    "0.1546219769806585": {
-      "data": "New Item",
-      "index": "0.1546219769806585",
-      "children": [],
-      "isFolder": false,
-      "depth": null,
-      "content": "안녕하세요"
-    },
-    "0.7344382078580975": {
-      "data": "New Item",
-      "index": "0.7344382078580975",
-      "children": [],
-      "isFolder": false,
-      "depth": null,
-      "content": ""
     }
-  }
+  },
+  "projects": [
+    {
+      "id": 1,
+      "name": "Java 프로젝트",
+      "language": "Java",
+      "description": "Java로 구현된 프로젝트입니다.",
+      "lastModified": "2024-02-05"
+    },
+    {
+      "id": 2,
+      "name": "JavaScript 앱",
+      "language": "JavaScript",
+      "description": "JavaScript로 만들어진 웹 애플리케이션입니다.",
+      "lastModified": "2024-02-05"
+    },
+    {
+      "id": 3,
+      "name": "Python",
+      "language": "Python",
+      "description": "Python으로 작성된 스크립트입니다.",
+      "lastModified": "2024-02-05",
+      "number": 3
+    }
+  ]
 }

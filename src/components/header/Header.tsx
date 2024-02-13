@@ -1,11 +1,12 @@
 // Header 컴포넌트 (Header.tsx)
 import React from "react"
 
-type OnAddContainer = () => void
-
-const Header = ({ onAddContainer }: { onAddContainer: OnAddContainer }) => {
+interface HeaderProps {
+  onAddContainerClick: () => void
+}
+const Header: React.FC<HeaderProps> = ({ onAddContainerClick }) => {
   return (
-    <div className="flex justify-between items-center mb-10 mt-5 bg-white ">
+    <div className="flex justify-between items-center mb-10 mt-5 bg-white">
       <div className="w-1/2">
         <h1 className="text-lg font-bold">모든 컨테이너</h1>
         <input
@@ -15,7 +16,10 @@ const Header = ({ onAddContainer }: { onAddContainer: OnAddContainer }) => {
         />
       </div>
 
-      <button className="bg-lime-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={onAddContainer}>
+      <button
+        className="bg-lime-500 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded"
+        onClick={onAddContainerClick}
+      >
         + 새 컨테이너
       </button>
     </div>
