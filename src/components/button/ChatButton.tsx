@@ -16,8 +16,8 @@ const ChatButton = () => {
         onClick={() => dispatch(toggleChatButton())}
         className={
           isModalOpened
-            ? "w-5 h-5 border-black bg-blue-300 flex justify-center items-center rounded-full top-0 right-0 "
-            : "w-5 h-5 border-black bg-blue-500 flex justify-center items-center rounded-full top-0 right-0 "
+            ? "w-5 h-5 border-black bg-blue-300 flex justify-center items-center rounded-full fixed top-12 right-3 z-50"
+            : "w-5 h-5 border-black bg-blue-500 flex justify-center items-center rounded-full fixed top-12 right-3 z-50"
         }
       >
         <CIcon className="w-3 h-3 mb-0.5" icon={cilCommentBubble} />

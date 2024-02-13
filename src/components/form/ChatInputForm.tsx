@@ -26,7 +26,7 @@ const ChatInputForm = () => {
         onKeyDown={pressEnter}
         className="border text-sm border-gray-400 w-5/6 h-full rounded-md break-words"
       ></textarea>
-      <button className="ml-2 w-6 h-6 rounded-full bg-gray-300" onClick={sendMessage}>
+      <button className="select-none ml-2 w-6 h-6 rounded-full bg-gray-300" onClick={sendMessage}>
         S
       </button>
     </form>

@@ -5,6 +5,7 @@ import { ActiveFileProvider, useActiveFile } from "../../context/ActiveFileConte
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
 import { FileStructureProvider } from "context/FileStructureContext"
+import ChatButton from "@/components/button/ChatButton"
 
 const IDEPage = () => {
   return (
@@ -55,6 +56,8 @@ const IDEContent = () => {
       >
         {isFileTreeVisible ? "«" : "»"}
       </button>
+
+      <ChatButton />
 
       <div className="flex-1 overflow-y-auto pl-5 mt-5">
         <div className="flex ml-1">
