@@ -1,11 +1,20 @@
-import React, { useState } from "react"
-import FileTree from "../../components/filetree/FileTree"
-import Editor from "../../components/editor/Editor"
+import React from "react"
+
+/* Component */
+import FileTree from "@/components/filetree/FileTree"
+import Editor from "@/components/editor/Editor"
+import ChatButton from "@/components/button/ChatButton"
+
+/* UI */
 import { ActiveFileProvider, useActiveFile } from "../../context/ActiveFileContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
+
+/* State */
 import { FileStructureProvider } from "context/FileStructureContext"
-import ChatButton from "@/components/button/ChatButton"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "store"
+import { toggleTreeVisible } from "./FileTreeSlice"
 
 const IDEPage = () => {
   return (
@@ -18,11 +27,12 @@ const IDEPage = () => {
 }
 
 const IDEContent = () => {
-  const [isFileTreeVisible, setIsFileTreeVisible] = useState(true)
+  const isFileTreeVisible = useSelector((state: RootState) => state.fileTree.value)
+  const dispatch = useDispatch()
   const { tabs, setTabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent } = useActiveFile()
 
   const toggleFileTree = () => {
-    setIsFileTreeVisible(!isFileTreeVisible)
+    dispatch(toggleTreeVisible())
   }
   // addTab 함수는 이제 파일의 'data'와 'content'를 받습니다.
   const addTab = (fileData: string, fileContent: string) => {
