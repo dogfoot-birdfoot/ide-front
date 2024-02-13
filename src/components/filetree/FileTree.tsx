@@ -37,7 +37,18 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
 
   async onRenameItem(item: { index: string | number }, name: any) {
     if (this.data[item.index]) {
-      this.data[item.index].data = name
+      // 기존 데이터를 복사하여 새로운 객체를 생성합니다.
+      const updatedItem = { ...this.data[item.index] }
+      // 업데이트할 이름을 새로운 객체에 반영합니다.
+      updatedItem.data = name
+
+      try {
+        // Send the updated data to the server
+        await axios.put(`http://localhost:3001/files`, updatedItem)
+        console.log("이름 수정완료")
+      } catch (error) {
+        console.error("이름 수정 실패:", error)
+      }
     }
   }
 

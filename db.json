@@ -6,8 +6,10 @@
       "children": [
         "uuid-folder1",
         "uuid-file1",
-        "0.5539322463459033",
-        "0.9336912858398567"
+        "0.32270367393368393",
+        "0.6366714927210362",
+        "0.1546219769806585",
+        "0.7344382078580975"
       ],
       "data": "Root Directory"
     },
@@ -32,26 +34,26 @@
       "isFolder": false,
       "children": [],
       "data": "Second File",
-      "content": "한번 더 수정"
+      "content": "Content of the second file inside the first folder."
     },
     "uuid-file3": {
       "index": "uuid-file3",
       "isFolder": false,
       "children": [],
       "data": "Third File",
-      "content": "코드수정"
+      "content": "Content of the third file inside the first folder."
     },
-    "0.5539322463459033": {
+    "0.1546219769806585": {
       "data": "New Item",
-      "index": "0.5539322463459033",
+      "index": "0.1546219769806585",
       "children": [],
       "isFolder": false,
       "depth": null,
-      "content": "수정합니다"
+      "content": "안녕하세요"
     },
-    "0.9336912858398567": {
+    "0.7344382078580975": {
       "data": "New Item",
-      "index": "0.9336912858398567",
+      "index": "0.7344382078580975",
       "children": [],
       "isFolder": false,
       "depth": null,

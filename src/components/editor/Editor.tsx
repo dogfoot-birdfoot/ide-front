@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import CodeMirror from "@uiw/react-codemirror"
 import { useActiveFile } from "../../context/ActiveFileContext"
 import { materialDark as material } from "@uiw/codemirror-theme-material"
