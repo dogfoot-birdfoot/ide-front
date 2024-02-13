@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-react": "^2.2.1",
     "@blueprintjs/core": "^5.9.1",
     "@codemirror/autocomplete": "^6.12.0",
     "@codemirror/lang-cpp": "^6.0.2",
