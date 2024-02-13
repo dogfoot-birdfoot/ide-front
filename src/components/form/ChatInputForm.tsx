@@ -7,12 +7,12 @@ const ChatInputForm = () => {
     e.preventDefault()
   }
 
-  const pressEnter = (e: any) => {
+  const pressEnter = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13 && e.shiftKey == false) {
       if (!e.repeat) {
-        const newEvent = new Event("submit")
-        e.target.value = ""
-        e.target.form.dispatchEvent(newEvent)
+        const textarea = document.getElementById("chatMessage") as HTMLTextAreaElement
+        textarea.value = ""
+        // submit Event
       }
 
       e.preventDefault()
@@ -20,7 +20,7 @@ const ChatInputForm = () => {
   }
 
   return (
-    <form className="flex justify-center items-center border-t pt-1 pl-1 pb-1 h-20 border-gray-400">
+    <form className="flex justify-center items-center border-t h-1/6 pt-2 pb-2 h-20 border-gray-400">
       <textarea
         id="chatMessage"
         onKeyDown={pressEnter}

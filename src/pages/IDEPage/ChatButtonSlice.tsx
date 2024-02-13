@@ -5,7 +5,7 @@ interface ChatButtonState {
 }
 
 const initialState: ChatButtonState = {
-  value: true
+  value: false
 }
 
 export const ChatButtonSlice = createSlice({
