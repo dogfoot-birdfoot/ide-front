@@ -5,8 +5,11 @@ module.exports = {
     extend: {
       colors: {
         customGray: "#353A3D"
+      },
+      height: {
+        128: "32rem"
       }
     }
   },
-  plugins: []
+  plugins: [require("tailwind-scrollbar-hide")]
 }
