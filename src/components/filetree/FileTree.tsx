@@ -4,7 +4,8 @@ import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-compl
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-import { FileStructureChangeCallback } from "type"
+import { ContextMenuState, FileStructureChangeCallback } from "type"
+import ContextMenu from "./ContextMenu"
 
 class CustomDataProviderImplementation implements TreeDataProvider<any> {
   data: any
@@ -169,6 +170,7 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
   const { setActiveFile, setActiveFileContent, addTab, tabs } = useActiveFile()
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,6 +187,33 @@ function FileTree() {
 
   const dataProvider = useMemo(() => new CustomDataProviderImplementation(initialData), [initialData])
 
+  const handleContextMenu = (event: React.MouseEvent, itemIndex: string) => {
+    event.preventDefault()
+    setContextMenu({
+      x: event.pageX,
+      y: event.pageY,
+      itemIndex
+    })
+  }
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(null)
+  }
+
+  // const handleDeleteItem = () => {
+  //   if (contextMenu) {
+  //     dataProvider.removeItem(contextMenu.itemIndex)
+  //     setContextMenu(null) // 컨텍스트 메뉴 닫기
+  //   }
+  // }
+
+  useEffect(() => {
+    // 바깥쪽 클릭 시 컨텍스트 메뉴 닫기
+    document.addEventListener("click", handleCloseContextMenu)
+    return () => {
+      document.removeEventListener("click", handleCloseContextMenu)
+    }
+  }, [])
   const injectItem = () => {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
     dataProvider && dataProvider.injectItem(parentId, "New Item")
@@ -196,7 +225,7 @@ function FileTree() {
   }
 
   return (
-    <div className="ml-5 mt-5 text-white">
+    <div className="ml-5 mt-5 text-white" onClick={handleCloseContextMenu}>
       <div className="flex items-center mb-4 justify-between  bg-slate-600">
         <h3 className="text-lg font-semibold">Project</h3>
         <div>
@@ -271,7 +300,11 @@ function FileTree() {
             onContextMenu={e => {
               e.preventDefault() // 우클릭 메뉴 표시를 막습니다.
               e.stopPropagation() // 이벤트 버블링을 막습니다.
-              dataProvider.removeItem(item.index) // 아이템을 삭제합니다.
+              setContextMenu({
+                x: e.pageX,
+                y: e.pageY,
+                itemIndex: item.index
+              }) // 컨텍스트 메뉴 설정
             }}
           >
             <span
@@ -289,6 +322,16 @@ function FileTree() {
       >
         <Tree treeId="tree-1" rootItem="root" treeLabel="File System" />
       </UncontrolledTreeEnvironment>
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onDelete={() => {
+            dataProvider.removeItem(contextMenu.itemIndex)
+            setContextMenu(null) // 컨텍스트 메뉴 숨기기
+          }}
+        />
+      )}
     </div>
   )
 }

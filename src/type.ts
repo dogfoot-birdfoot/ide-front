@@ -56,3 +56,13 @@ export type messageProps = {
   id: number
   text: string
 }
+export interface ContextMenuProps {
+  onDelete: () => void
+  x: number
+  y: number
+}
+export interface ContextMenuState {
+  x: number
+  y: number
+  itemIndex: string | number
+}
