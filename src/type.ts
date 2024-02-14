@@ -46,3 +46,13 @@ export type Container = {
   name: string
 }
 export type Containers = Container[]
+
+export type messageListProps = {
+  id: number
+  text: string
+}
+
+export type messageProps = {
+  id: number
+  text: string
+}
