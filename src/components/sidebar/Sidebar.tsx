@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons"
+import { faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-svg-icons"
 import { faRocket } from "@fortawesome/free-solid-svg-icons"
 
 export type SidebarProps = {
@@ -25,9 +25,8 @@ const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail, containers }) =>
       <div className="mb-5">
         <h2 className="text-lg font-semibold">{userName}</h2>
         <p className="text-sm">{userEmail}</p>
-        <Link to="/profile">
-          <button className="mt-3 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-600">내 정보 페이지</button>
-        </Link>
+
+        <button className="mt-3 px-4 py-2 bg-lime-500 text-white rounded hover:bg-lime-600">내 정보 관리</button>
       </div>
 
       {/* 유저 정보와 스페이스 섹션 사이의 실선 */}
@@ -37,12 +36,16 @@ const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail, containers }) =>
       <div>
         <div className="flex justify-between">
           <div className="flex items-center mb-2">
-            <FontAwesomeIcon icon={faRocket} className="text-lg text-gray-500 mr-2 cursor-pointer" />
+            <FontAwesomeIcon icon={faRocket} className="text-lg text-gray-500 mr-2 " />
             <h3 className="font-semibold mb-2">스페이스</h3>
           </div>
           <div>
-            <button onClick={() => setIsSpaceExpanded(!isSpaceExpanded)} className="text-xs">
-              {isSpaceExpanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+            <button onClick={() => setIsSpaceExpanded(!isSpaceExpanded)} className="text-md">
+              {isSpaceExpanded ? (
+                <FontAwesomeIcon icon={faCircleChevronUp} color="gray" />
+              ) : (
+                <FontAwesomeIcon icon={faCircleChevronDown} color="gray" />
+              )}
             </button>
           </div>
         </div>
