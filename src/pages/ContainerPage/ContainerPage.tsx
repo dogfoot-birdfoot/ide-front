@@ -11,7 +11,6 @@ const ContainerPage: React.FC = () => {
   const [containers, setContainers] = useState<ContainerFormProps[]>([])
   const [isNewContainerModalOpen, setIsNewContainerModalOpen] = useState<boolean>(false)
   const [isEditContainerModalOpen, setIsEditContainerModalOpen] = useState<boolean>(false)
-
   const [editingContainer, setEditingContainer] = useState<ContainerFormProps | null>(null)
 
   useEffect(() => {
@@ -36,6 +35,19 @@ const ContainerPage: React.FC = () => {
 
     fetchContainers()
   }, [])
+
+  const handleDelete = async (containerId: number) => {
+    // 선택적: 백엔드에서 데이터를 삭제하는 API 요청
+    try {
+      await axios.delete(`http://localhost:3001/projects/${containerId}`)
+      console.log("삭제 성공")
+    } catch (error) {
+      console.error("삭제 중 오류 발생:", error)
+    }
+
+    // UI에서 컨테이너 제거
+    setContainers(prevContainers => prevContainers.filter(container => container.id !== containerId))
+  }
 
   const handleEditClick = (container: ContainerFormProps) => {
     setEditingContainer(container)
@@ -78,7 +90,12 @@ const ContainerPage: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {containers.map(container => (
-            <ContainerForm key={container.id} {...container} onEdit={() => handleEditClick(container)} />
+            <ContainerForm
+              key={container.id}
+              {...container}
+              onDelete={handleDelete}
+              onEdit={() => handleEditClick(container)}
+            />
           ))}
         </div>
         <Link to={"/ide"}>IDE 페이지 접근하기</Link>
