@@ -1,11 +1,5 @@
 import React, { useState } from "react"
-
-interface ContainerEditModalProps {
-  isOpen: boolean
-  onClose: () => void
-  container: any // 수정할 컨테이너의 정보를 받습니다. 타입은 프로젝트에 맞게 조정하세요.
-  onSave: (container: any) => void // 수정된 컨테이너 정보를 저장하는 함수입니다.
-}
+import { ContainerEditModalProps } from "type"
 
 const ContainerEditModal: React.FC<ContainerEditModalProps> = ({ isOpen, onClose, container, onSave }) => {
   const [editedContainer, setEditedContainer] = useState(container)

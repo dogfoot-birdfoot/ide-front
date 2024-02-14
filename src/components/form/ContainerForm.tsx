@@ -3,19 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faJava, faJsSquare, faPython, faCuttlefish } from "@fortawesome/free-brands-svg-icons"
 import { faPenToSquare, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { faFileCode } from "@fortawesome/free-regular-svg-icons" // 기본 아이콘
-import axios from "axios"
 import { useNavigate } from "react-router-dom"
-
-export interface ContainerFormProps {
-  id: number
-  name: string
-  number: number
-  language: string
-  lastModified: string
-  description: string
-  onEdit: () => void // 수정 버튼 클릭 이벤트 핸들러를 props로 추가합니다.
-  onDelete: (id: number) => void // 삭제 함수 prop 추가
-}
+import { ContainerFormProps } from "type"
 
 const getLanguageIcon = (language: string) => {
   switch (language) {

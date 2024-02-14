@@ -1,15 +1,6 @@
 import React, { FC } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
-
-type FormProps = {
-  title: string
-  getDataForm: (email: string, password: string) => void
-}
-
-type Inputs = {
-  email: string
-  password: string
-}
+import { FormProps, Inputs } from "type"
 
 const SignInForm: FC<FormProps> = ({ title, getDataForm }) => {
   const { register, handleSubmit, reset } = useForm<Inputs>({

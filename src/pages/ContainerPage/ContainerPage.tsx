@@ -3,9 +3,8 @@ import axios from "axios"
 import Sidebar from "../../components/sidebar/Sidebar"
 import ContainerForm, { ContainerFormProps } from "../../components/form/ContainerForm"
 import Header from "../../components/header/Header"
-import { Link } from "react-router-dom"
-import ContainerEditModal from "@/components/form/ContainerEditModal"
-import NewContainerModal from "@/components/form/NewContainerModal"
+import ContainerEditModal from "@/components/modal/ContainerEditModal"
+import NewContainerModal from "@/components/modal/NewContainerModal"
 
 const ContainerPage: React.FC = () => {
   const [containers, setContainers] = useState<ContainerFormProps[]>([])

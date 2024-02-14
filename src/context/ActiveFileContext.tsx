@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from "react"
 
-// Tab 타입을 정의합니다.
 interface Tab {
   data: string
   content: string

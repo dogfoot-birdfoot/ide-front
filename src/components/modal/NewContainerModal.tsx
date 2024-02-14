@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
-
-interface NewContainerModalProps {
-  isOpen: boolean
-  onClose: () => void
-}
+import { NewContainerModalProps } from "type"
 
 const currentDate = new Date()
 const year = currentDate.getFullYear()

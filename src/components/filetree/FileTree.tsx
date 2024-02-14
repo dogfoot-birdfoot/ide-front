@@ -4,7 +4,8 @@ import { Tree, TreeDataProvider, TreeItem, UncontrolledTreeEnvironment } from "r
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-type FileStructureChangeCallback = (newFileStructure: any) => void
+import { FileStructureChangeCallback } from "type"
+
 class CustomDataProviderImplementation implements TreeDataProvider<any> {
   data: any
   treeChangeListeners: ((changedItemIds: any) => void)[]
