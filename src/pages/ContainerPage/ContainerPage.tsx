@@ -22,6 +22,7 @@ const ContainerPage: React.FC = () => {
         const containersData: ContainerFormProps[] = projects.map((project: any, index: number) => ({
           id: project.id,
           name: project.name,
+          description: project.description,
           language: project.language || "N/A", // 'language' 속성이 없는 경우 'N/A'로 표시합니다.
           lastModified: project.lastModified,
           number: index + 1 // 순차적 번호 할당
@@ -68,6 +69,7 @@ const ContainerPage: React.FC = () => {
       const containersData: ContainerFormProps[] = projects.map((project: any, index: number) => ({
         id: project.id,
         name: project.name,
+        description: projects.description,
         language: project.language || "N/A",
         lastModified: project.lastModified,
         number: index + 1
@@ -98,7 +100,6 @@ const ContainerPage: React.FC = () => {
             />
           ))}
         </div>
-        <Link to={"/ide"}>IDE 페이지 접근하기</Link>
       </div>
       {isEditContainerModalOpen && editingContainer && (
         <ContainerEditModal

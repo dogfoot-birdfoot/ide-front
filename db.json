@@ -47,16 +47,16 @@
       "id": 2,
       "name": "JavaScript 앱",
       "language": "JavaScript",
-      "description": "JavaScript로 만들어진 웹 애플리케이션입니다.",
+      "description": "JavaScript로 만들어진 웹 애플리케이션.",
       "lastModified": "2024-02-05",
       "number": 2
     },
     {
-      "id": 3,
-      "name": "Python",
+      "name": "python",
       "language": "Python",
-      "description": "Python으로 작성된 스크립트입니다.",
-      "lastModified": "2024-02-05",
+      "description": "파이썬 연습",
+      "lastModified": "2024-02-14",
+      "id": 3,
       "number": 3
     }
   ]
