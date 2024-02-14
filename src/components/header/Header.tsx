@@ -1,10 +1,11 @@
 // Header 컴포넌트 (Header.tsx)
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 interface HeaderProps {
   onAddContainerClick: () => void
+  onSearch: (searchTerm: string) => void // 검색 함수 prop 추가
 }
-const Header: React.FC<HeaderProps> = ({ onAddContainerClick }) => {
+const Header: React.FC<HeaderProps> = ({ onAddContainerClick, onSearch }) => {
   return (
     <div className="flex justify-between items-center mb-10 mt-5 bg-white">
       <div className="w-1/2">
@@ -15,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({ onAddContainerClick }) => {
           placeholder="컨테이너 이름 검색"
           id="id"
           autoComplete="off"
+          onChange={e => onSearch(e.target.value)} // 입력 값이 변경될 때 onSearch 호출
         />
       </div>
 

@@ -12,6 +12,8 @@ const ContainerPage: React.FC = () => {
   const [isNewContainerModalOpen, setIsNewContainerModalOpen] = useState<boolean>(false)
   const [isEditContainerModalOpen, setIsEditContainerModalOpen] = useState<boolean>(false)
   const [editingContainer, setEditingContainer] = useState<ContainerFormProps | null>(null)
+  const [filteredContainers, setFilteredContainers] = useState<ContainerFormProps[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const fetchContainers = async () => {
@@ -36,6 +38,16 @@ const ContainerPage: React.FC = () => {
 
     fetchContainers()
   }, [])
+
+  useEffect(() => {
+    // 검색어에 따라 컨테이너를 필터링하는 로직
+    const filtered = containers.filter(container => container.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    setFilteredContainers(filtered)
+  }, [searchTerm, containers]) // 검색어 또는 컨테이너 목록이 변경될 때마다 필터링을 다시 실행
+
+  const handleSearch = (searchTerm: string) => {
+    setSearchTerm(searchTerm)
+  }
 
   const handleDelete = async (containerId: number) => {
     // 선택적: 백엔드에서 데이터를 삭제하는 API 요청
@@ -88,10 +100,10 @@ const ContainerPage: React.FC = () => {
     <div className="flex min-h-screen">
       <Sidebar userName="홍길동" userEmail="hong@example.com" containers={containers} />
       <div className="flex-grow p-4">
-        <Header onAddContainerClick={() => setIsNewContainerModalOpen(true)} />
+        <Header onAddContainerClick={() => setIsNewContainerModalOpen(true)} onSearch={handleSearch} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {containers.map(container => (
+          {filteredContainers.map(container => (
             <ContainerForm
               key={container.id}
               {...container}
