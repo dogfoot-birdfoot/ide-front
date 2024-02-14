@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
 
 interface NewContainerModalProps {
@@ -42,21 +42,36 @@ const NewContainerModal: React.FC<NewContainerModalProps> = ({ isOpen, onClose }
       console.error("Error adding container:", error)
     }
   }
+  // NewContainerModal 컴포넌트 내부
+  useEffect(() => {
+    // 모달이 닫힐 때 실행할 로직
+    if (!isOpen) {
+      // 상태 초기화 로직
+      setNewContainer({
+        name: "",
+        language: "Java",
+        description: "",
+        lastModified: "" // 초기값으로 설정
+      })
+    }
+  }, [isOpen]) // isOpen이 변경될 때마다 이 효과를 실행
 
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg md:w-1/2">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={onClose}>
+          <div className="bg-white p-8 rounded-lg shadow-lg w-2/4 md:w-1/2}" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-semibold text-gray-800 mb-4">새 컨테이너 추가</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="id" className="block text-sm font-medium text-gray-700">
                   이름
                 </label>
                 <input
+                  autoComplete="off"
                   type="text"
                   name="name"
+                  id="name"
                   value={newContainer.name}
                   onChange={handleInputChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -64,7 +79,7 @@ const NewContainerModal: React.FC<NewContainerModalProps> = ({ isOpen, onClose }
               </div>
 
               <div className="mb-4">
-                <label htmlFor="language" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   언어
                 </label>
                 <select
@@ -81,11 +96,11 @@ const NewContainerModal: React.FC<NewContainerModalProps> = ({ isOpen, onClose }
               </div>
 
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="id" className="block text-sm font-medium text-gray-700">
                   설명
                 </label>
                 <textarea
-                  name="description"
+                  id="description"
                   value={newContainer.description}
                   onChange={handleInputChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -106,7 +121,6 @@ const NewContainerModal: React.FC<NewContainerModalProps> = ({ isOpen, onClose }
               </div>
             </form>
           </div>
-          <div className="fixed inset-0 z-10" onClick={onClose}></div> {/* 모달 외부 클릭 시 닫기 */}
         </div>
       )}
     </>

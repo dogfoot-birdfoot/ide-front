@@ -37,8 +37,6 @@ const ContainerEditModal: React.FC<ContainerEditModalProps> = ({ isOpen, onClose
       ...prevState,
       language: selectedLanguage
     }))
-
-    onSave(editedContainer)
   }
 
   return (
@@ -47,12 +45,14 @@ const ContainerEditModal: React.FC<ContainerEditModalProps> = ({ isOpen, onClose
         <h2 className="text-lg font-semibold text-gray-800 mb-4">컨테이너 정보 수정</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="id" className="block text-sm font-medium text-gray-700">
               이름
             </label>
             <input
+              autoComplete="off"
               type="text"
               name="name"
+              id="name"
               value={editedContainer.name}
               onChange={handleInputChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -60,11 +60,11 @@ const ContainerEditModal: React.FC<ContainerEditModalProps> = ({ isOpen, onClose
           </div>
 
           <div className="mt-4">
-            <label htmlFor="language" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="id" className="block text-sm font-medium text-gray-700">
               언어
             </label>
             <select
-              name="language"
+              id="language"
               value={editedContainer.language}
               onChange={handleLanguageChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"

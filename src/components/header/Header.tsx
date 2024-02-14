@@ -13,6 +13,8 @@ const Header: React.FC<HeaderProps> = ({ onAddContainerClick }) => {
           className="mt-6 p-2 border border-slate-400 rounded w-3/4"
           type="text"
           placeholder="컨테이너 이름 검색"
+          id="id"
+          autoComplete="off"
         />
       </div>
 
