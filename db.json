@@ -3,41 +3,40 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": [
-        "uuid-folder1",
-        "uuid-file1"
-      ],
-      "data": "Root Directory"
+      "children": ["uuid-folder1", "uuid-file1"],
+      "data": "Root Directory",
+      "parentId": null
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": [
-        "uuid-file2",
-        "uuid-file3"
-      ],
-      "data": "First Folder"
+      "children": ["uuid-file2", "uuid-file3"],
+      "data": "First Folder",
+      "parentId": "root"
     },
     "uuid-file2": {
       "index": "uuid-file2",
       "isFolder": false,
       "children": [],
       "data": "Second File",
-      "content": "Content of the second file inside the first folder."
+      "content": "Content of the second file inside the first folder.",
+      "parentId": "uuid-folder1"
     },
     "uuid-file3": {
       "index": "uuid-file3",
       "isFolder": false,
       "children": [],
       "data": "Third File",
-      "content": "Content of the third file inside the first folder."
+      "content": "Content of the third file inside the first folder.",
+      "parentId": "uuid-folder1"
     },
     "uuid-file1": {
       "index": "uuid-file1",
       "isFolder": false,
       "children": [],
       "data": "First File",
-      "content": "Content of the first file inside the first folder."
+      "content": "Content of the first file inside the first folder.",
+      "parentId": "root"
     }
   },
   "projects": [

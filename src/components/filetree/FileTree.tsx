@@ -36,62 +36,76 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     }
   }
 
-  async onRenameItem(item: { index: string | number }, newName: string) {
-    // 데이터의 특정 아이템만 이름을 수정합니다.
-    const targetItem = this.data[item.index]
-    if (targetItem) {
-      targetItem.data = newName // 이름만 수정
-      console.log("targetItem:", targetItem)
-      console.log("targetItem.data : ", targetItem.data)
-      console.log("this.data:", this.data)
-      console.log("this.data[item.index].data:", this.data[item.index].data)
-      console.log("item:", item)
+  // async onRenameItem(item: { index: string | number }, newName: string) {
+  //   const targetItem = this.data[item.index]
+  //   if (targetItem) {
+  //     // 파일 이름 변경
+  //     targetItem.data = newName
 
-      try {
-        // 서버에 변경된 아이템만 업데이트를 요청합니다.
-        const response = await axios.put(`http://localhost:3001/files/${item.index}`, {
-          ...targetItem, // 기존 데이터 구조를 유지하면서 이름만 변경
-          data: newName // 수정된 이름
-        })
+  //     // 부모 폴더 찾기
+  //     const parentItem = this.data[targetItem.parentId]
+  //     if (parentItem && parentItem.children.includes(item.index)) {
+  //       // 부모 폴더의 children 배열 업데이트 로직 추가
+  //       // 이 예시에서는 파일의 index(ID)가 변경되지 않으므로, 부모 폴더의 children 배열을 업데이트할 필요가 없습니다.
+  //       // 만약 파일의 ID가 변경되는 경우라면, 여기서 부모 폴더의 children 배열에서 이전 ID를 찾아 새 ID로 교체해야 합니다.
+  //     }
 
-        console.log("서버 응답:", response.data)
-      } catch (error) {
-        console.error("이름 수정 중 오류 발생:", error)
-      }
-    } else {
-      console.error(`아이템 ID '${item.index}'에 해당하는 아이템이 존재하지 않습니다.`)
-    }
-  }
+  //     try {
+  //       const response = await axios.put(`http://localhost:3001/files/${item.index}`, {
+  //         ...targetItem // 이름 변경
+  //       })
+  //       console.log("서버 응답:", response.data)
+  //     } catch (error) {
+  //       console.error("이름 수정 중 오류 발생:", error)
+  //     }
+  //   } else {
+  //     console.error(`아이템 ID '${item.index}'에 해당하는 아이템이 존재하지 않습니다.`)
+  //   }
+  // }
+
   async removeItem(itemId: string | number) {
-    if (!this.data[itemId]) {
+    const itemToRemove = this.data[itemId]
+    if (!itemToRemove) {
       console.error(`아이템 ID '${itemId}'에 해당하는 아이템이 존재하지 않습니다.`)
       return
     }
 
-    const deleteItemAndChildren = (id: string | number) => {
-      const item = this.data[id]
-      if (!item) return
-
-      const parent = this.data[item.parentId]
+    // 아이템이 파일인 경우, 부모의 children 배열에서 해당 파일 제거
+    if (!itemToRemove.isFolder) {
+      const parent = this.data[itemToRemove.parentId]
       if (parent) {
-        parent.children = parent.children.filter((childId: string) => childId !== id)
+        parent.children = parent.children.filter((childId: string) => childId !== itemId)
+        this.treeChangeListeners.forEach(listener => listener([itemToRemove.parentId]))
+      }
+      delete this.data[itemId] // 파일 삭제
+    } else {
+      // 아이템이 폴더인 경우, 폴더와 그 안의 모든 자식 아이템 재귀적으로 삭제
+      const deleteItemAndChildren = (id: string | number) => {
+        const item = this.data[id]
+        if (!item) return
+
+        if (item.children && item.children.length > 0) {
+          item.children.forEach((childId: string) => deleteItemAndChildren(childId))
+        }
+
+        delete this.data[id]
       }
 
-      delete this.data[id]
-      if (item.children && item.children.length > 0) {
-        item.children.forEach((childId: string) => deleteItemAndChildren(childId))
+      deleteItemAndChildren(itemId) // 폴더 및 그 안의 자식들 삭제
+
+      // 부모 폴더의 children 배열에서 현재 폴더 제거
+      const parent = this.data[itemToRemove.parentId]
+      if (parent) {
+        parent.children = parent.children.filter((childId: string) => childId !== itemId)
+        this.treeChangeListeners.forEach(listener => listener([itemToRemove.parentId]))
       }
     }
-
-    deleteItemAndChildren(itemId)
-
-    this.treeChangeListeners.forEach(listener => listener([itemId]))
 
     if (this.onFileStructureChange) {
-      this.onFileStructureChange(this.data)
+      this.onFileStructureChange(this.data) // 변경 사항 콜백 호출
     }
 
-    // Send data to localhost:3001
+    // 변경된 데이터를 서버로 전송
     axios
       .post("http://localhost:3001/files", this.data)
       .then(response => {
@@ -199,7 +213,7 @@ function FileTree() {
         canReorderItems={true}
         dataProvider={dataProvider}
         getItemTitle={item => item.data}
-        onRenameItem={(item, newName) => dataProvider.onRenameItem(item, newName)}
+        // onRenameItem={(item, newName) => dataProvider.onRenameItem(item, newName)}
         onSelectItems={selectedItemIds => {
           console.log("Selected item IDs:", selectedItemIds)
 
