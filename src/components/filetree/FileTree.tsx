@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
-import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
+import { Tree, TreeDataProvider, TreeItem, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-type FileStructureChangeCallback = (newFileStructure: any) => void
+import { FileStructureChangeCallback } from "type"
+
 class CustomDataProviderImplementation implements TreeDataProvider<any> {
   data: any
   treeChangeListeners: ((changedItemIds: any) => void)[]
@@ -35,20 +36,30 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     }
   }
 
-  async onRenameItem(item: { index: string | number }, name: any) {
-    if (this.data[item.index]) {
-      // 기존 데이터를 복사하여 새로운 객체를 생성합니다.
-      const updatedItem = { ...this.data[item.index] }
-      // 업데이트할 이름을 새로운 객체에 반영합니다.
-      updatedItem.data = name
+  async onRenameItem(item: { index: string | number }, newName: string) {
+    // 데이터의 특정 아이템만 이름을 수정합니다.
+    const targetItem = this.data[item.index]
+    if (targetItem) {
+      targetItem.data = newName // 이름만 수정
+      console.log("targetItem:", targetItem)
+      console.log("targetItem.data : ", targetItem.data)
+      console.log("this.data:", this.data)
+      console.log("this.data[item.index].data:", this.data[item.index].data)
+      console.log("item:", item)
 
       try {
-        // Send the updated data to the server
-        await axios.put(`http://localhost:3001/files`, updatedItem)
-        console.log("이름 수정완료")
+        // 서버에 변경된 아이템만 업데이트를 요청합니다.
+        const response = await axios.put(`http://localhost:3001/files/${item.index}`, {
+          ...targetItem, // 기존 데이터 구조를 유지하면서 이름만 변경
+          data: newName // 수정된 이름
+        })
+
+        console.log("서버 응답:", response.data)
       } catch (error) {
-        console.error("이름 수정 실패:", error)
+        console.error("이름 수정 중 오류 발생:", error)
       }
+    } else {
+      console.error(`아이템 ID '${item.index}'에 해당하는 아이템이 존재하지 않습니다.`)
     }
   }
 
@@ -146,15 +157,9 @@ function FileTree() {
         canDragAndDrop={true}
         canDropOnFolder={true}
         canReorderItems={true}
-        onRenameItem={async (treeItem, newName) => {
-          // 'treeItem' 객체에서 아이템의 ID를 추출
-          const itemId = treeItem.data // 'id'는 예시이며 실제 속성명은 확인이 필요합니다.
-
-          // 아이템 ID와 새로운 이름을 사용하여 이름 변경 로직 수행
-          await dataProvider.onRenameItem({ index: itemId }, newName)
-        }}
         dataProvider={dataProvider}
         getItemTitle={item => item.data}
+        onRenameItem={(item, newName) => dataProvider.onRenameItem(item, newName)}
         onSelectItems={selectedItemIds => {
           console.log("Selected item IDs:", selectedItemIds)
 
