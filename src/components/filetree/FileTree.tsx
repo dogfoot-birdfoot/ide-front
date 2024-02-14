@@ -64,39 +64,41 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
   // }
 
   async removeItem(itemId: string | number) {
+    console.log(`Attempting to remove item with ID: ${itemId}`) // 삭제 시도되는 아이템의 ID 출력
+
     const itemToRemove = this.data[itemId]
     if (!itemToRemove) {
       console.error(`아이템 ID '${itemId}'에 해당하는 아이템이 존재하지 않습니다.`)
       return
     }
 
-    // 아이템이 파일인 경우, 부모의 children 배열에서 해당 파일 제거
     if (!itemToRemove.isFolder) {
+      // 아이템이 파일인 경우, 부모의 children 배열에서 해당 파일 제거
       const parent = this.data[itemToRemove.parentId]
       if (parent) {
-        parent.children = parent.children.filter((childId: string) => childId !== itemId)
+        parent.children = parent.children.filter((childId: string | number) => childId !== itemId)
         this.treeChangeListeners.forEach(listener => listener([itemToRemove.parentId]))
       }
       delete this.data[itemId] // 파일 삭제
     } else {
       // 아이템이 폴더인 경우, 폴더와 그 안의 모든 자식 아이템 재귀적으로 삭제
-      const deleteItemAndChildren = (id: string | number) => {
-        const item = this.data[id]
-        if (!item) return
+      const deleteFolderAndChildren = (id: string | number) => {
+        const folder = this.data[id]
+        if (!folder) return
 
-        if (item.children && item.children.length > 0) {
-          item.children.forEach((childId: string) => deleteItemAndChildren(childId))
+        if (folder.children && folder.children.length > 0) {
+          folder.children.forEach((childId: string | number) => deleteFolderAndChildren(childId))
         }
 
         delete this.data[id]
       }
 
-      deleteItemAndChildren(itemId) // 폴더 및 그 안의 자식들 삭제
+      deleteFolderAndChildren(itemId) // 폴더 및 그 안의 자식들 삭제
 
       // 부모 폴더의 children 배열에서 현재 폴더 제거
       const parent = this.data[itemToRemove.parentId]
       if (parent) {
-        parent.children = parent.children.filter((childId: string) => childId !== itemId)
+        parent.children = parent.children.filter((childId: string | number) => childId !== itemId)
         this.treeChangeListeners.forEach(listener => listener([itemToRemove.parentId]))
       }
     }
@@ -268,6 +270,7 @@ function FileTree() {
             }}
             onContextMenu={e => {
               e.preventDefault() // 우클릭 메뉴 표시를 막습니다.
+              e.stopPropagation() // 이벤트 버블링을 막습니다.
               dataProvider.removeItem(item.index) // 아이템을 삭제합니다.
             }}
           >
