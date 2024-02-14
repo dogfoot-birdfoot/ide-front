@@ -3,19 +3,13 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": [
-        "uuid-folder1",
-        "uuid-file1"
-      ],
+      "children": ["uuid-folder1", "uuid-file1"],
       "data": "Root Directory"
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": [
-        "uuid-file2",
-        "uuid-file3"
-      ],
+      "children": ["uuid-file2", "uuid-file3"],
       "data": "First Folder"
     },
     "uuid-file1": {
@@ -64,40 +58,6 @@
       "description": "Python으로 작성된 스크립트입니다.",
       "lastModified": "2024-02-05",
       "number": 3
-    },
-    {
-      "name": "ddd",
-      "language": "JavaScript",
-      "description": "",
-      "lastModified": "2024-02-14 10:01:24",
-      "": "f",
-      "id": 4,
-      "number": 4
-    },
-    {
-      "name": "새컨테이너추가",
-      "language": "Python",
-      "description": "",
-      "lastModified": "2024-02-14 10:01:24",
-      "": "f",
-      "id": 5
-    },
-    {
-      "name": "추가",
-      "language": "Python",
-      "description": "",
-      "lastModified": "2024-02-14 10:16:07",
-      "": "ㅇ",
-      "id": 6,
-      "number": 6
-    },
-    {
-      "name": "ddd",
-      "language": "JavaScript",
-      "description": "",
-      "lastModified": "",
-      "": "d",
-      "id": 7
     }
   ]
 }

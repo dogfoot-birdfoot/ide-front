@@ -25,7 +25,9 @@ const NewContainerModal: React.FC<NewContainerModalProps> = ({ isOpen, onClose }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
+    console.log("텍스트에리어 작동중")
     setNewContainer({ ...newContainer, [name]: value })
+    console.log("업데이트 후", newContainer)
   }
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -101,6 +103,7 @@ const NewContainerModal: React.FC<NewContainerModalProps> = ({ isOpen, onClose }
                 </label>
                 <textarea
                   id="description"
+                  name="description"
                   value={newContainer.description}
                   onChange={handleInputChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
