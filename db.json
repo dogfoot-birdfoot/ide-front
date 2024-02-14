@@ -18,13 +18,6 @@
       ],
       "data": "First Folder"
     },
-    "uuid-file1": {
-      "index": "uuid-file1",
-      "isFolder": false,
-      "children": [],
-      "data": "First File",
-      "content": "Content of the first file."
-    },
     "uuid-file2": {
       "index": "uuid-file2",
       "isFolder": false,
@@ -38,6 +31,13 @@
       "children": [],
       "data": "Third File",
       "content": "Content of the third file inside the first folder."
+    },
+    "uuid-file1": {
+      "index": "uuid-file1",
+      "isFolder": false,
+      "children": [],
+      "data": "First File",
+      "content": "Content of the first file inside the first folder."
     }
   },
   "projects": [

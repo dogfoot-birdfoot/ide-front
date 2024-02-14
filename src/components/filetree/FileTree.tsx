@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
-import { Tree, TreeDataProvider, TreeItem, UncontrolledTreeEnvironment } from "react-complex-tree"
+import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
@@ -62,6 +62,45 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
       console.error(`아이템 ID '${item.index}'에 해당하는 아이템이 존재하지 않습니다.`)
     }
   }
+  async removeItem(itemId: string | number) {
+    if (!this.data[itemId]) {
+      console.error(`아이템 ID '${itemId}'에 해당하는 아이템이 존재하지 않습니다.`)
+      return
+    }
+
+    const deleteItemAndChildren = (id: string | number) => {
+      const item = this.data[id]
+      if (!item) return
+
+      const parent = this.data[item.parentId]
+      if (parent) {
+        parent.children = parent.children.filter((childId: string) => childId !== id)
+      }
+
+      delete this.data[id]
+      if (item.children && item.children.length > 0) {
+        item.children.forEach((childId: string) => deleteItemAndChildren(childId))
+      }
+    }
+
+    deleteItemAndChildren(itemId)
+
+    this.treeChangeListeners.forEach(listener => listener([itemId]))
+
+    if (this.onFileStructureChange) {
+      this.onFileStructureChange(this.data)
+    }
+
+    // Send data to localhost:3001
+    axios
+      .post("http://localhost:3001/files", this.data)
+      .then(response => {
+        console.log("Data sent successfully:", response.data)
+      })
+      .catch(error => {
+        console.error("Error sending data:", error)
+      })
+  }
 
   injectItem(parentId: string | number, name: string, isFolder = false) {
     const rand = `${Math.random()}`
@@ -71,6 +110,7 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     this.data[rand] = {
       data: name,
       index: rand,
+      parentId: parentId,
       children: [],
       isFolder: isFolder,
       depth: newItemDepth,
@@ -211,6 +251,10 @@ function FileTree() {
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start"
+            }}
+            onContextMenu={e => {
+              e.preventDefault() // 우클릭 메뉴 표시를 막습니다.
+              dataProvider.removeItem(item.index) // 아이템을 삭제합니다.
             }}
           >
             <span
