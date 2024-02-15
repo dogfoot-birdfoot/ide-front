@@ -30,19 +30,6 @@ const IDEContent = () => {
     dispatch(toggleTreeVisible())
   }
 
-  const renderContent = () => {
-    if (activeFile === "") {
-      // 아무것도 선택하지 않았을 때
-      return <Loading />
-    } else if (activeFileContent === "") {
-      // 파일은 선택했으나 내용이 비어있을 때
-      return <Editor value="" />
-    } else {
-      // 파일 선택 및 내용이 있을 때
-      return <Editor value={activeFileContent} />
-    }
-  }
-
   const addTab = (fileData: string, fileContent: string) => {
     const isTabOpen = tabs.some(tab => tab.data === fileData)
     if (!isTabOpen) {
@@ -53,11 +40,18 @@ const IDEContent = () => {
   }
 
   const removeTab = (fileData: string) => {
-    setTabs(prevTabs => prevTabs.filter(tab => tab.data !== fileData))
-    if (activeFile === fileData) {
-      setActiveFile("")
-      setActiveFileContent("")
-    }
+    setTabs(prevTabs => {
+      const updatedTabs = prevTabs.filter(tab => tab.data !== fileData)
+      if (updatedTabs.length > 0) {
+        const nextActiveTab = updatedTabs[0]
+        setActiveFile(nextActiveTab.data)
+        setActiveFileContent(nextActiveTab.content)
+      } else {
+        setActiveFile("")
+        setActiveFileContent("")
+      }
+      return updatedTabs
+    })
   }
 
   const isTabActive = (fileData: string) => activeFile === fileData
@@ -97,7 +91,7 @@ const IDEContent = () => {
           ))}
         </div>
 
-        <div className="flex-1">{renderContent()}</div>
+        {tabs.length > 0 ? <Editor value={activeFileContent} /> : <Loading />}
       </div>
     </div>
   )
