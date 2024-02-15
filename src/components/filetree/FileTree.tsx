@@ -202,25 +202,9 @@ function FileTree() {
 
   const dataProvider = useMemo(() => new CustomDataProviderImplementation(initialData), [initialData])
 
-  const handleContextMenu = (event: React.MouseEvent, itemIndex: string) => {
-    event.preventDefault()
-    setContextMenu({
-      x: event.pageX,
-      y: event.pageY,
-      itemIndex
-    })
-  }
-
   const handleCloseContextMenu = () => {
     setContextMenu(null)
   }
-
-  // const handleDeleteItem = () => {
-  //   if (contextMenu) {
-  //     dataProvider.removeItem(contextMenu.itemIndex)
-  //     setContextMenu(null) // 컨텍스트 메뉴 닫기
-  //   }
-  // }
 
   useEffect(() => {
     // 바깥쪽 클릭 시 컨텍스트 메뉴 닫기
@@ -276,7 +260,7 @@ function FileTree() {
                   setActiveFileContent(item.content) // 활성 파일 내용 설정
                 } else {
                   // 새 탭을 추가하고 활성화합니다.
-                  addTab({ data: item.data, content: item.content })
+                  addTab({ data: item.data, content: item.content, id: item.id })
                   setActiveFile(item.data)
                   setActiveFileContent(item.content)
                 }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import FileTree from "@/components/filetree/FileTree"
 import Editor from "@/components/editor/Editor"
 import ChatButton from "@/components/button/ChatButton"
@@ -24,37 +24,21 @@ const IDEPage = () => {
 const IDEContent = () => {
   const isFileTreeVisible = useSelector((state: RootState) => state.fileTree.value)
   const dispatch = useDispatch()
-  const { tabs, setTabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent } = useActiveFile()
+  const { tabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent, removeTab } = useActiveFile()
 
   const toggleFileTree = () => {
     dispatch(toggleTreeVisible())
   }
 
-  const addTab = (fileData: string, fileContent: string) => {
-    const isTabOpen = tabs.some(tab => tab.data === fileData)
-    if (!isTabOpen) {
-      setTabs(prevTabs => [...prevTabs, { data: fileData, content: fileContent }])
-    }
-    setActiveFile(fileData)
-    setActiveFileContent(fileContent)
-  }
-
-  const removeTab = (fileData: string) => {
-    setTabs(prevTabs => {
-      const updatedTabs = prevTabs.filter(tab => tab.data !== fileData)
-      if (updatedTabs.length > 0) {
-        const nextActiveTab = updatedTabs[0]
-        setActiveFile(nextActiveTab.data)
-        setActiveFileContent(nextActiveTab.content)
-      } else {
-        setActiveFile("")
-        setActiveFileContent("")
-      }
-      return updatedTabs
-    })
-  }
-
   const isTabActive = (fileData: string) => activeFile === fileData
+
+  useEffect(() => {
+    console.log("Active file changed:", activeFile)
+  }, [activeFile])
+
+  useEffect(() => {
+    console.log("Active file content changed:", activeFileContent)
+  }, [activeFileContent])
 
   return (
     <div className="flex h-screen bg-slate-600">
@@ -73,11 +57,11 @@ const IDEContent = () => {
       <ChatButton />
 
       <div className="flex-1 overflow-y-auto pl-5 mt-5">
-        <div className="flex ml-2">
-          {tabs.map((tab, index) => (
+        <div className="flex ml-1">
+          {tabs.map(tab => (
             <div
-              key={index}
-              className={`p-2 border ${isTabActive(tab.data) ? "bg-lime-500 text-white" : "bg-gray-700 text-white"}`}
+              key={tab.id}
+              className={`p-2  ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
               onClick={() => {
                 setActiveFile(tab.data)
                 setActiveFileContent(tab.content)

@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode, Dispatch, SetSta
 interface Tab {
   data: string
   content: string
+  id: number
 }
 
 interface ActiveFileContextType {
@@ -40,12 +41,23 @@ export const ActiveFileProvider: React.FC<ActiveFileProviderProps> = ({ children
   }
 
   const removeTab = (tabData: string) => {
-    setTabs(prevTabs => prevTabs.filter(tab => tab.data !== tabData))
-    // If the active file is being closed, clear the active content.
-    if (activeFile === tabData) {
-      setActiveFile("")
-      setActiveFileContent("")
-    }
+    setTabs(prevTabs => {
+      const tabIndex = prevTabs.findIndex(tab => tab.data === tabData)
+      const updatedTabs = prevTabs.filter(tab => tab.data !== tabData)
+
+      if (activeFile === tabData && updatedTabs.length > 0) {
+        const newActiveIndex = tabIndex >= updatedTabs.length ? updatedTabs.length - 1 : tabIndex
+        const newActiveTab = updatedTabs[newActiveIndex]
+
+        setActiveFile(newActiveTab.data)
+        setActiveFileContent(newActiveTab.content)
+      } else if (updatedTabs.length === 0) {
+        setActiveFile("")
+        setActiveFileContent("")
+      }
+
+      return updatedTabs
+    })
   }
 
   return (
