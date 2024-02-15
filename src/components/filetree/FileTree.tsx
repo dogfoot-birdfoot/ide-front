@@ -2,7 +2,14 @@ import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
 import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
+import {
+  faFileAlt,
+  faFileCirclePlus,
+  faFloppyDisk,
+  faFolder,
+  faFolderOpen,
+  faFolderPlus
+} from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
 import { ContextMenuState, FileStructureChangeCallback } from "type"
 import ContextMenu from "./ContextMenu"
@@ -249,6 +256,9 @@ function FileTree() {
           </button>
           <button onClick={injectFolder} className="ml-2 p-1">
             <FontAwesomeIcon icon={faFolderPlus} /> {/* 폴더 추가 아이콘 */}
+          </button>
+          <button onClick={() => console.log("1")} className="ml-2 p-1 ">
+            <FontAwesomeIcon icon={faFloppyDisk} /> {/* 파일 저장 아이콘 */}
           </button>
         </div>
       </div>
