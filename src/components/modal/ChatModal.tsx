@@ -5,7 +5,7 @@ import ChatHeader from "@/components/header/ChatHeader"
 
 const ChatModal = () => {
   return (
-    <div className="absolute w-72 border border-blue-500 rounded-lg right-4 top-20 z-50 bg-white">
+    <div className={"absolute w-72 border border-blue-500 rounded-lg right-7 top-20 z-50 bg-white"}>
       <ChatHeader></ChatHeader>
       <Messages></Messages>
       <ChatInputForm></ChatInputForm>
