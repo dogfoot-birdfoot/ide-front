@@ -79,7 +79,7 @@ const IDEContent = () => {
       <ChatButton />
 
       <div className="flex-1 overflow-y-auto pl-5 mt-5">
-        <div className="flex ml-1">
+        <div className="flex ml-2">
           {tabs.map((tab, index) => (
             <div
               key={index}
