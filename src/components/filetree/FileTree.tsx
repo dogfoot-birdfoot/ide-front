@@ -44,26 +44,24 @@ function FileTree() {
     }
   }, [])
 
-  const handleContextMenu = (event: React.MouseEvent, itemIndex: string) => {
-    event.preventDefault()
-    setContextMenu({
-      x: event.pageX,
-      y: event.pageY,
-      itemIndex
-    })
-  }
-
   const handleCloseContextMenu = () => {
     setContextMenu(null)
   }
 
+  useEffect(() => {
+    // 바깥쪽 클릭 시 컨텍스트 메뉴 닫기
+    document.addEventListener("click", handleCloseContextMenu)
+    return () => {
+      document.removeEventListener("click", handleCloseContextMenu)
+    }
+  }, [])
+  
   // const handleDeleteItem = () => {
   //   if (contextMenu) {
   //     dataProvider.removeItem(contextMenu.itemIndex)
   //     setContextMenu(null) // 컨텍스트 메뉴 닫기
   //   }
   // }
-
   const injectItem = () => {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
     dataProvider && dataProvider.injectItem(parentId, "New Item")
@@ -152,7 +150,7 @@ function FileTree() {
                   setActiveFileContent(item.content) // 활성 파일 내용 설정
                 } else {
                   // 새 탭을 추가하고 활성화합니다.
-                  addTab({ data: item.data, content: item.content })
+                  addTab({ data: item.data, content: item.content, id: item.id })
                   setActiveFile(item.data)
                   setActiveFileContent(item.content)
                 }

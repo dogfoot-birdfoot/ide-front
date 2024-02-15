@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import FileTree from "@/components/filetree/FileTree"
 import Editor from "@/components/editor/Editor"
 import ChatButton from "@/components/button/ChatButton"
@@ -24,43 +24,22 @@ const IDEPage = () => {
 const IDEContent = () => {
   const isFileTreeVisible = useSelector((state: RootState) => state.fileTree.value)
   const dispatch = useDispatch()
-  const { tabs, setTabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent } = useActiveFile()
+  const { tabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent, removeTab } = useActiveFile()
 
   const toggleFileTree = () => {
     dispatch(toggleTreeVisible())
   }
 
-  const renderContent = () => {
-    if (activeFile === "") {
-      // 아무것도 선택하지 않았을 때
-      return <Loading />
-    } else if (activeFileContent === "") {
-      // 파일은 선택했으나 내용이 비어있을 때
-      return <Editor value="" />
-    } else {
-      // 파일 선택 및 내용이 있을 때
-      return <Editor value={activeFileContent} />
-    }
-  }
-
-  const addTab = (fileData: string, fileContent: string) => {
-    const isTabOpen = tabs.some(tab => tab.data === fileData)
-    if (!isTabOpen) {
-      setTabs(prevTabs => [...prevTabs, { data: fileData, content: fileContent }])
-    }
-    setActiveFile(fileData)
-    setActiveFileContent(fileContent)
-  }
-
-  const removeTab = (fileData: string) => {
-    setTabs(prevTabs => prevTabs.filter(tab => tab.data !== fileData))
-    if (activeFile === fileData) {
-      setActiveFile("")
-      setActiveFileContent("")
-    }
-  }
-
   const isTabActive = (fileData: string) => activeFile === fileData
+  const handleTabClick = (tabData: string, tabContent: string) => {
+    setActiveFile(tabData)
+    setActiveFileContent(tabContent)
+  }
+
+  // activeFile 상태 변경 감지
+  useEffect(() => {
+    console.log(`현재 활성 탭: ${activeFile}`)
+  }, [activeFile])
 
   return (
     <div className="flex h-screen bg-slate-600">
@@ -79,25 +58,28 @@ const IDEContent = () => {
       <ChatButton />
 
       <div className="flex-1 overflow-y-auto pl-5 mt-5">
-        <div className="flex ml-2">
-          {tabs.map((tab, index) => (
+        <div className="flex ml-1">
+          {tabs.map(tab => (
             <div
-              key={index}
-              className={`p-2 border ${isTabActive(tab.data) ? "bg-lime-500 text-white" : "bg-gray-700 text-white"}`}
-              onClick={() => {
-                setActiveFile(tab.data)
-                setActiveFileContent(tab.content)
-              }}
+              key={tab.id}
+              className={`p-2  ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
+              onClick={() => handleTabClick(tab.data, tab.content)}
             >
               {tab.data}
-              <button onClick={() => removeTab(tab.data)} className="ml-3">
+              <button
+                onClick={e => {
+                  e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
+                  removeTab(tab.data)
+                }}
+                className="ml-3"
+              >
                 <FontAwesomeIcon icon={faTimesCircle} />
               </button>
             </div>
           ))}
         </div>
 
-        <div className="flex-1">{renderContent()}</div>
+        {tabs.length > 0 ? <Editor value={activeFileContent} /> : <Loading />}
       </div>
     </div>
   )
