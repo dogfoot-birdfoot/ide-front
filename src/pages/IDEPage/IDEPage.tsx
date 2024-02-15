@@ -31,14 +31,15 @@ const IDEContent = () => {
   }
 
   const isTabActive = (fileData: string) => activeFile === fileData
+  const handleTabClick = (tabData: string, tabContent: string) => {
+    setActiveFile(tabData)
+    setActiveFileContent(tabContent)
+  }
 
+  // activeFile 상태 변경 감지
   useEffect(() => {
-    console.log("Active file changed:", activeFile)
+    console.log(`현재 활성 탭: ${activeFile}`)
   }, [activeFile])
-
-  useEffect(() => {
-    console.log("Active file content changed:", activeFileContent)
-  }, [activeFileContent])
 
   return (
     <div className="flex h-screen bg-slate-600">
@@ -62,13 +63,16 @@ const IDEContent = () => {
             <div
               key={tab.id}
               className={`p-2  ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
-              onClick={() => {
-                setActiveFile(tab.data)
-                setActiveFileContent(tab.content)
-              }}
+              onClick={() => handleTabClick(tab.data, tab.content)}
             >
               {tab.data}
-              <button onClick={() => removeTab(tab.data)} className="ml-3">
+              <button
+                onClick={e => {
+                  e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
+                  removeTab(tab.data)
+                }}
+                className="ml-3"
+              >
                 <FontAwesomeIcon icon={faTimesCircle} />
               </button>
             </div>
