@@ -12,10 +12,7 @@ import { java } from "@codemirror/lang-java"
 import { cppCompletions, javaCompletions, pythonCompletions } from "./autocomplete"
 import axios from "axios"
 import { useFileStructure } from "context/FileStructureContext"
-
-interface EditorProps {
-  value: string // 'value' prop 타입을 string으로 정의
-}
+import { EditorProps } from "type"
 
 const Editor: React.FC<EditorProps> = ({ value }) => {
   const { activeFile, activeFileContent, setActiveFileContent } = useActiveFile()
