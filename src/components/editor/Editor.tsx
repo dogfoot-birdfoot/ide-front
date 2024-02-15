@@ -13,7 +13,11 @@ import { cppCompletions, javaCompletions, pythonCompletions } from "./autocomple
 import axios from "axios"
 import { useFileStructure } from "context/FileStructureContext"
 
-const Editor: React.FC = () => {
+interface EditorProps {
+  value: string // 'value' prop 타입을 string으로 정의
+}
+
+const Editor: React.FC<EditorProps> = ({ value }) => {
   const { activeFile, activeFileContent, setActiveFileContent } = useActiveFile()
   const { fileStructure, setFileStructure } = useFileStructure()
 
@@ -79,7 +83,7 @@ const Editor: React.FC = () => {
     <div>
       <CodeMirror
         theme={material}
-        value={activeFileContent || ""}
+        value={value}
         height="90vh"
         onChange={value => handleEditorChange(value)} // onChange 이벤트 핸들러 추가
         basicSetup={{
