@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
-import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
+import { Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faFileAlt,
@@ -74,8 +74,42 @@ function FileTree() {
     dataProvider && dataProvider.injectFolder(parentId, "New Folder")
   }
 
-  const saveFileContent = () => {
-    console.log("save File Function")
+  const saveFileContent = async () => {
+    if (!fileStructure) {
+      console.error("File structure is undefined.")
+      return
+    }
+
+    // activeFile에 해당하는 객체를 찾습니다.
+    let fileToUpdate = null
+    let fileKeyToUpdate = null
+    for (const key in fileStructure) {
+      if (fileStructure[key].data === activeFile) {
+        fileToUpdate = fileStructure[key]
+        fileKeyToUpdate = key
+        break
+      }
+    }
+
+    // 찾은 객체의 content 속성을 업데이트합니다.
+    if (fileToUpdate && fileKeyToUpdate) {
+      const updatedFileStructure = {
+        ...fileStructure,
+        [fileKeyToUpdate]: {
+          ...fileToUpdate,
+          content: activeFileContent
+        }
+      }
+
+      try {
+        await axios.put("http://localhost:3001/files", updatedFileStructure)
+        console.log("File content updated successfully.")
+      } catch (error) {
+        console.error("Error updating file content:", error)
+      }
+    } else {
+      console.error("Active file not found in file structure.")
+    }
   }
 
   return (
