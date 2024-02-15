@@ -1,6 +1,13 @@
 import React, { useEffect } from "react"
-import CodeMirror from "@uiw/react-codemirror"
+import axios from "axios"
+
+import { EditorProps } from "type"
+import { cppCompletions, javaCompletions, pythonCompletions } from "@/components/editor/autocomplete"
 import { useActiveFile } from "../../context/ActiveFileContext"
+import { useFileStructure } from "../../context/FileStructureContext"
+
+/* Code Mirror */
+import CodeMirror from "@uiw/react-codemirror"
 import { materialDark as material } from "@uiw/codemirror-theme-material"
 import { autocompletion } from "@codemirror/autocomplete"
 import { keymap } from "@codemirror/view"
@@ -9,14 +16,10 @@ import { javascript } from "@codemirror/lang-javascript"
 import { python } from "@codemirror/lang-python"
 import { cpp } from "@codemirror/lang-cpp"
 import { java } from "@codemirror/lang-java"
-import { cppCompletions, javaCompletions, pythonCompletions } from "./autocomplete"
-import axios from "axios"
-import { useFileStructure } from "context/FileStructureContext"
-import { EditorProps } from "type"
 
 const Editor: React.FC<EditorProps> = ({ value }) => {
-  const { activeFile, activeFileContent, setActiveFileContent } = useActiveFile()
-  const { fileStructure, setFileStructure } = useFileStructure()
+  const { activeFile, setActiveFileContent } = useActiveFile()
+  const { setFileStructure } = useFileStructure()
 
   useEffect(() => {
     const fetchFileStructure = async () => {
@@ -37,44 +40,6 @@ const Editor: React.FC<EditorProps> = ({ value }) => {
     },
     [setActiveFileContent]
   )
-
-  const saveFileContent = async () => {
-    if (!fileStructure) {
-      console.error("File structure is undefined.")
-      return
-    }
-
-    // activeFile에 해당하는 객체를 찾습니다.
-    let fileToUpdate = null
-    let fileKeyToUpdate = null
-    for (const key in fileStructure) {
-      if (fileStructure[key].data === activeFile) {
-        fileToUpdate = fileStructure[key]
-        fileKeyToUpdate = key
-        break
-      }
-    }
-
-    // 찾은 객체의 content 속성을 업데이트합니다.
-    if (fileToUpdate && fileKeyToUpdate) {
-      const updatedFileStructure = {
-        ...fileStructure,
-        [fileKeyToUpdate]: {
-          ...fileToUpdate,
-          content: activeFileContent
-        }
-      }
-
-      try {
-        await axios.put("http://localhost:3001/files", updatedFileStructure)
-        console.log("File content updated successfully.")
-      } catch (error) {
-        console.error("Error updating file content:", error)
-      }
-    } else {
-      console.error("Active file not found in file structure.")
-    }
-  }
 
   return (
     <div>
@@ -101,9 +66,6 @@ const Editor: React.FC<EditorProps> = ({ value }) => {
           keymap.of(completionKeymap)
         ]}
       />
-      <div style={{ textAlign: "center", marginTop: "10px" }}>
-        <button onClick={saveFileContent}>Save</button>
-      </div>
     </div>
   )
 }
