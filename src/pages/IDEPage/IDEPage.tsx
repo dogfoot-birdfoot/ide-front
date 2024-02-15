@@ -15,6 +15,7 @@ import { FileStructureProvider } from "context/FileStructureContext"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
 import { toggleTreeVisible } from "./FileTreeSlice"
+import Loading from "@/components/editor/Loading"
 
 const IDEPage = () => {
   return (
@@ -89,9 +90,7 @@ const IDEContent = () => {
           ))}
         </div>
 
-        <div className="flex-1">
-          <Editor />
-        </div>
+        <div className="flex-1">{activeFileContent ? <Editor /> : <Loading />}</div>
       </div>
     </div>
   )
