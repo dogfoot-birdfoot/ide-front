@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
-import { Tree, TreeDataProvider, TreeItem, UncontrolledTreeEnvironment } from "react-complex-tree"
+import { Tree, TreeDataProvider, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileAlt, faFileCirclePlus, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-import { FileStructureChangeCallback } from "type"
+import { ContextMenuState, FileStructureChangeCallback } from "type"
+import ContextMenu from "./ContextMenu"
 
 class CustomDataProviderImplementation implements TreeDataProvider<any> {
   data: any
@@ -36,31 +37,86 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     }
   }
 
-  async onRenameItem(item: { index: string | number }, newName: string) {
-    // 데이터의 특정 아이템만 이름을 수정합니다.
-    const targetItem = this.data[item.index]
-    if (targetItem) {
-      targetItem.data = newName // 이름만 수정
-      console.log("targetItem:", targetItem)
-      console.log("targetItem.data : ", targetItem.data)
-      console.log("this.data:", this.data)
-      console.log("this.data[item.index].data:", this.data[item.index].data)
-      console.log("item:", item)
+  // async onRenameItem(item: { index: string | number }, newName: string) {
+  //   const targetItem = this.data[item.index]
+  //   if (targetItem) {
+  //     // 파일 이름 변경
+  //     targetItem.data = newName
 
-      try {
-        // 서버에 변경된 아이템만 업데이트를 요청합니다.
-        const response = await axios.put(`http://localhost:3001/files/${item.index}`, {
-          ...targetItem, // 기존 데이터 구조를 유지하면서 이름만 변경
-          data: newName // 수정된 이름
-        })
+  //     // 부모 폴더 찾기
+  //     const parentItem = this.data[targetItem.parentId]
+  //     if (parentItem && parentItem.children.includes(item.index)) {
+  //       // 부모 폴더의 children 배열 업데이트 로직 추가
+  //       // 이 예시에서는 파일의 index(ID)가 변경되지 않으므로, 부모 폴더의 children 배열을 업데이트할 필요가 없습니다.
+  //       // 만약 파일의 ID가 변경되는 경우라면, 여기서 부모 폴더의 children 배열에서 이전 ID를 찾아 새 ID로 교체해야 합니다.
+  //     }
 
-        console.log("서버 응답:", response.data)
-      } catch (error) {
-        console.error("이름 수정 중 오류 발생:", error)
-      }
-    } else {
-      console.error(`아이템 ID '${item.index}'에 해당하는 아이템이 존재하지 않습니다.`)
+  //     try {
+  //       const response = await axios.put(`http://localhost:3001/files/${item.index}`, {
+  //         ...targetItem // 이름 변경
+  //       })
+  //       console.log("서버 응답:", response.data)
+  //     } catch (error) {
+  //       console.error("이름 수정 중 오류 발생:", error)
+  //     }
+  //   } else {
+  //     console.error(`아이템 ID '${item.index}'에 해당하는 아이템이 존재하지 않습니다.`)
+  //   }
+  // }
+
+  async removeItem(itemId: string | number) {
+    console.log(`Attempting to remove item with ID: ${itemId}`) // 삭제 시도되는 아이템의 ID 출력
+
+    const itemToRemove = this.data[itemId]
+    if (!itemToRemove) {
+      console.error(`아이템 ID '${itemId}'에 해당하는 아이템이 존재하지 않습니다.`)
+      return
     }
+
+    if (!itemToRemove.isFolder) {
+      // 아이템이 파일인 경우, 부모의 children 배열에서 해당 파일 제거
+      const parent = this.data[itemToRemove.parentId]
+      if (parent) {
+        parent.children = parent.children.filter((childId: string | number) => childId !== itemId)
+        this.treeChangeListeners.forEach(listener => listener([itemToRemove.parentId]))
+      }
+      delete this.data[itemId] // 파일 삭제
+    } else {
+      // 아이템이 폴더인 경우, 폴더와 그 안의 모든 자식 아이템 재귀적으로 삭제
+      const deleteFolderAndChildren = (id: string | number) => {
+        const folder = this.data[id]
+        if (!folder) return
+
+        if (folder.children && folder.children.length > 0) {
+          folder.children.forEach((childId: string | number) => deleteFolderAndChildren(childId))
+        }
+
+        delete this.data[id]
+      }
+
+      deleteFolderAndChildren(itemId) // 폴더 및 그 안의 자식들 삭제
+
+      // 부모 폴더의 children 배열에서 현재 폴더 제거
+      const parent = this.data[itemToRemove.parentId]
+      if (parent) {
+        parent.children = parent.children.filter((childId: string | number) => childId !== itemId)
+        this.treeChangeListeners.forEach(listener => listener([itemToRemove.parentId]))
+      }
+    }
+
+    if (this.onFileStructureChange) {
+      this.onFileStructureChange(this.data) // 변경 사항 콜백 호출
+    }
+
+    // 변경된 데이터를 서버로 전송
+    axios
+      .post("http://localhost:3001/files", this.data)
+      .then(response => {
+        console.log("Data sent successfully:", response.data)
+      })
+      .catch(error => {
+        console.error("Error sending data:", error)
+      })
   }
 
   injectItem(parentId: string | number, name: string, isFolder = false) {
@@ -71,6 +127,7 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
     this.data[rand] = {
       data: name,
       index: rand,
+      parentId: parentId,
       children: [],
       isFolder: isFolder,
       depth: newItemDepth,
@@ -113,6 +170,7 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
   const { setActiveFile, setActiveFileContent, addTab, tabs } = useActiveFile()
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,6 +187,33 @@ function FileTree() {
 
   const dataProvider = useMemo(() => new CustomDataProviderImplementation(initialData), [initialData])
 
+  const handleContextMenu = (event: React.MouseEvent, itemIndex: string) => {
+    event.preventDefault()
+    setContextMenu({
+      x: event.pageX,
+      y: event.pageY,
+      itemIndex
+    })
+  }
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(null)
+  }
+
+  // const handleDeleteItem = () => {
+  //   if (contextMenu) {
+  //     dataProvider.removeItem(contextMenu.itemIndex)
+  //     setContextMenu(null) // 컨텍스트 메뉴 닫기
+  //   }
+  // }
+
+  useEffect(() => {
+    // 바깥쪽 클릭 시 컨텍스트 메뉴 닫기
+    document.addEventListener("click", handleCloseContextMenu)
+    return () => {
+      document.removeEventListener("click", handleCloseContextMenu)
+    }
+  }, [])
   const injectItem = () => {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
     dataProvider && dataProvider.injectItem(parentId, "New Item")
@@ -140,7 +225,7 @@ function FileTree() {
   }
 
   return (
-    <div className="ml-5 mt-5 text-white">
+    <div className="ml-5 mt-5 text-white" onClick={handleCloseContextMenu}>
       <div className="flex items-center mb-4 justify-between  bg-slate-600">
         <h3 className="text-lg font-semibold">Project</h3>
         <div>
@@ -159,7 +244,7 @@ function FileTree() {
         canReorderItems={true}
         dataProvider={dataProvider}
         getItemTitle={item => item.data}
-        onRenameItem={(item, newName) => dataProvider.onRenameItem(item, newName)}
+        // onRenameItem={(item, newName) => dataProvider.onRenameItem(item, newName)}
         onSelectItems={selectedItemIds => {
           console.log("Selected item IDs:", selectedItemIds)
 
@@ -212,6 +297,15 @@ function FileTree() {
               flexDirection: "column",
               alignItems: "flex-start"
             }}
+            onContextMenu={e => {
+              e.preventDefault() // 우클릭 메뉴 표시를 막습니다.
+              e.stopPropagation() // 이벤트 버블링을 막습니다.
+              setContextMenu({
+                x: e.pageX,
+                y: e.pageY,
+                itemIndex: item.index
+              }) // 컨텍스트 메뉴 설정
+            }}
           >
             <span
               {...context.itemContainerWithoutChildrenProps}
@@ -228,6 +322,16 @@ function FileTree() {
       >
         <Tree treeId="tree-1" rootItem="root" treeLabel="File System" />
       </UncontrolledTreeEnvironment>
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onDelete={() => {
+            dataProvider.removeItem(contextMenu.itemIndex)
+            setContextMenu(null) // 컨텍스트 메뉴 숨기기
+          }}
+        />
+      )}
     </div>
   )
 }
