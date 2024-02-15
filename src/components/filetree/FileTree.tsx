@@ -23,8 +23,23 @@ class CustomDataProviderImplementation implements TreeDataProvider<any> {
 
   async onChangeItemChildren(itemId: string | number, newChildren: any) {
     if (this.data[itemId]) {
+      // 자식 목록 업데이트
       this.data[itemId].children = newChildren
+
+      // 각 자식의 parentId 업데이트
+      newChildren.forEach((childId: string | number) => {
+        if (this.data[childId]) {
+          this.data[childId].parentId = itemId // 자식의 parentId를 현재 항목의 ID로 설정
+        } else {
+          console.error(`자식 ID '${childId}'에 해당하는 항목이 존재하지 않습니다.`)
+        }
+      })
+
+      // 트리 변경 리스너에 변경 사항 알림
       this.treeChangeListeners.forEach(listener => listener([itemId]))
+
+      // 변경 사항을 서버에 동기화 또는 추가 작업 수행
+      // 예: 서버 동기화 코드, UI 업데이트 등
     } else {
       console.error(`아이템 ID '${itemId}'에 해당하는 아이템이 존재하지 않습니다.`)
     }
