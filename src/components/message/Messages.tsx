@@ -16,6 +16,18 @@ const Messages = () => {
     {
       id: 1,
       text: "so good."
+    },
+    {
+      id: 1,
+      text: "so good."
+    },
+    {
+      id: 1,
+      text: "so good. so good.so good.so good."
+    },
+    {
+      id: 2,
+      text: "How are you? How are you?How are you?How are you?How are you?How are you?How are you?How are you?How are you?"
     }
   ])
 
