@@ -102,6 +102,8 @@ function FileTree() {
       try {
         await axios.put("http://localhost:3001/files", updatedFileStructure)
         console.log("File content updated successfully.")
+        const response = await axios.get("http://localhost:3001/files")
+        setInitialData(response.data)
       } catch (error) {
         console.error("Error updating file content:", error)
       }
