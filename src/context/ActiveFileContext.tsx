@@ -4,6 +4,7 @@ interface Tab {
   data: string
   content: string
   id: number
+  index: string
 }
 
 interface ActiveFileContextType {
