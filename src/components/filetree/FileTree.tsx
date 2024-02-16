@@ -157,7 +157,7 @@ function FileTree() {
           ) : null
         }
         renderTreeContainer={({ children, containerProps }) => (
-          <div {...containerProps} className="p-2  border-gray-300 rounded-lg">
+          <div {...containerProps} className="p-1 border-gray-300 rounded-lg">
             {children}
           </div>
         )}
@@ -170,7 +170,7 @@ function FileTree() {
           <li
             {...context.itemContainerWithChildrenProps}
             style={{
-              marginLeft: `${depth * 20}px`,
+              marginLeft: `${depth * 3}px`,
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start"
@@ -188,7 +188,7 @@ function FileTree() {
             <span
               {...context.itemContainerWithoutChildrenProps}
               {...context.interactiveElementProps}
-              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+              style={{ whiteSpace: "nowrap", cursor: "pointer", display: "flex", alignItems: "center" }}
             >
               {item.isFolder ? context.isExpanded ? "" : "" : <FontAwesomeIcon icon={faFileAlt} />}
               {arrow}
