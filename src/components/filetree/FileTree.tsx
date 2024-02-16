@@ -57,10 +57,6 @@ function FileTree() {
     setIsFolder(isFolder)
     setIsModalOpen(true)
   }
-  // const injectFolder = () => {
-  //   const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
-  //   dataProvider && dataProvider.injectFolder(parentId, "New Folder")
-  // }
 
   const saveFileContent = async () => {
     if (!fileStructure) {
