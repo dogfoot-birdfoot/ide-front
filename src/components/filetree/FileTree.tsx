@@ -15,12 +15,14 @@ import { ContextMenuState } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
+import NameModal from "../modal/NameModal"
 
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
   const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =
     useActiveFile()
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { fileStructure } = useFileStructure()
   const dataProvider = useMemo(() => new CustomDataProvider(initialData), [initialData])
 
@@ -49,14 +51,18 @@ function FileTree() {
     }
   }, [])
 
-  const injectItem = () => {
-    const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
-    const itemName = window.prompt("Item name") || "제목없음" // 사용자가 취소하면 "제목없음"을 사용
-    if (dataProvider) {
-      dataProvider.injectItem(parentId, itemName)
-    }
-  }
+  // const injectItem = () => {
+  //   const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
+  //   const itemName = window.prompt("Item name") || "제목없음" // 사용자가 취소하면 "제목없음"을 사용
+  //   if (dataProvider) {
+  //     dataProvider.injectItem(parentId, itemName)
+  //   }
+  // }
 
+  const handleAddItem = () => {
+    console.log("add item")
+    setIsModalOpen(true) // 모달 열기
+  }
   const injectFolder = () => {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
     dataProvider && dataProvider.injectFolder(parentId, "New Folder")
@@ -107,8 +113,9 @@ function FileTree() {
       <div className="flex items-center mb-4 justify-between  bg-slate-600">
         <h3 className="text-lg font-semibold">Project</h3>
         <div>
-          <button onClick={injectItem} className="ml-2 p-1 ">
+          <button onClick={handleAddItem} className="ml-2 p-1 ">
             <FontAwesomeIcon icon={faFileCirclePlus} /> {/* 파일 추가 아이콘 */}
+            <NameModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} parentId="root" dataProvider={dataProvider} />
           </button>
           <button onClick={injectFolder} className="ml-2 p-1">
             <FontAwesomeIcon icon={faFolderPlus} /> {/* 폴더 추가 아이콘 */}
