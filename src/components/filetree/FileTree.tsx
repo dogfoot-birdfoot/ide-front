@@ -55,7 +55,7 @@ function FileTree() {
       document.removeEventListener("click", handleCloseContextMenu)
     }
   }, [])
-  
+
   // const handleDeleteItem = () => {
   //   if (contextMenu) {
   //     dataProvider.removeItem(contextMenu.itemIndex)
