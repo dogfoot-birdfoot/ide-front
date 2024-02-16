@@ -51,7 +51,10 @@ function FileTree() {
 
   const injectItem = () => {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
-    dataProvider && dataProvider.injectItem(parentId, "New Item")
+    const itemName = window.prompt("Item name") || "제목없음" // 사용자가 취소하면 "제목없음"을 사용
+    if (dataProvider) {
+      dataProvider.injectItem(parentId, itemName)
+    }
   }
 
   const injectFolder = () => {
