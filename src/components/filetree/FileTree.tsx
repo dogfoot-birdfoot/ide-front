@@ -15,12 +15,16 @@ import { ContextMenuState } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
+import NameModal from "../modal/NameModal"
 
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
   const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =
     useActiveFile()
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isFolder, setIsFolder] = useState(false)
+
   const { fileStructure } = useFileStructure()
   const dataProvider = useMemo(() => new CustomDataProvider(initialData), [initialData])
 
@@ -49,14 +53,9 @@ function FileTree() {
     }
   }, [])
 
-  const injectItem = () => {
-    const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
-    dataProvider && dataProvider.injectItem(parentId, "New Item")
-  }
-
-  const injectFolder = () => {
-    const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
-    dataProvider && dataProvider.injectFolder(parentId, "New Folder")
+  const handleOpenModal = (isFolder: boolean) => {
+    setIsFolder(isFolder)
+    setIsModalOpen(true)
   }
 
   const saveFileContent = async () => {
@@ -104,12 +103,28 @@ function FileTree() {
       <div className="flex items-center mb-4 justify-between  bg-slate-600">
         <h3 className="text-lg font-semibold">Project</h3>
         <div>
-          <button onClick={injectItem} className="ml-2 p-1 ">
-            <FontAwesomeIcon icon={faFileCirclePlus} /> {/* 파일 추가 아이콘 */}
-          </button>
-          <button onClick={injectFolder} className="ml-2 p-1">
-            <FontAwesomeIcon icon={faFolderPlus} /> {/* 폴더 추가 아이콘 */}
-          </button>
+          <>
+            <button onClick={() => handleOpenModal(false)} className="ml-2 p-1 ">
+              <FontAwesomeIcon icon={faFileCirclePlus} /> {/* 파일 추가 아이콘 */}
+            </button>
+            <button
+              onClick={() => {
+                handleOpenModal(true)
+              }}
+              className="ml-2 p-1"
+            >
+              <FontAwesomeIcon icon={faFolderPlus} />
+            </button>
+            {isModalOpen && (
+              <NameModal
+                isOpen={isModalOpen}
+                setIsOpen={setIsModalOpen}
+                parentId="root"
+                dataProvider={dataProvider}
+                isFolder={isFolder}
+              />
+            )}
+          </>
           <button onClick={saveFileContent} className="ml-2 p-1 ">
             <FontAwesomeIcon icon={faFloppyDisk} /> {/* 파일 저장 아이콘 */}
           </button>

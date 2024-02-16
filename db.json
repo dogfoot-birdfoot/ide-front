@@ -4,9 +4,7 @@
       "index": "root",
       "isFolder": true,
       "children": [
-        "uuid-folder1",
-        "0.7902507144031372",
-        "0.1552321419704792"
+        "uuid-folder1"
       ],
       "data": "Root Directory",
       "parentId": null
@@ -45,24 +43,6 @@
       "data": "First File",
       "content": "Content of the first file inside the first folder.",
       "parentId": "uuid-folder1"
-    },
-    "0.7902507144031372": {
-      "data": "New Item",
-      "index": "0.7902507144031372",
-      "parentId": "root",
-      "children": [],
-      "isFolder": false,
-      "depth": null,
-      "content": ""
-    },
-    "0.1552321419704792": {
-      "data": "New Item",
-      "index": "0.1552321419704792",
-      "parentId": "root",
-      "children": [],
-      "isFolder": false,
-      "depth": null,
-      "content": ""
     }
   },
   "projects": [
