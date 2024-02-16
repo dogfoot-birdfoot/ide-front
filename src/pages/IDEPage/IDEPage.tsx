@@ -53,7 +53,7 @@ const IDEContent = () => {
       <button
         onClick={toggleFileTree}
         className="mt-5 ml-[-1.25rem] z-20 p-2 bg-gray-700 text-white hover:bg-blue-700 transition-transform duration-500"
-        style={{ transform: `translateX(${isFileTreeVisible ? "100%" : "0"})` }}
+        style={{ transform: `translateX(${isFileTreeVisible ? "100%" : "90%"})` }}
       >
         {isFileTreeVisible ? "«" : "»"}
       </button>
