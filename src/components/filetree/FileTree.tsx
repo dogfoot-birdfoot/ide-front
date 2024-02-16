@@ -11,16 +11,17 @@ import {
   faFolderPlus
 } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-import { ContextMenuState, FileStructureChangeCallback } from "type"
+import { ContextMenuState } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
 
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
-  const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent } = useActiveFile()
+  const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =
+    useActiveFile()
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
-  const { fileStructure, setFileStructure } = useFileStructure()
+  const { fileStructure } = useFileStructure()
   const dataProvider = useMemo(() => new CustomDataProvider(initialData), [initialData])
 
   useEffect(() => {
@@ -36,14 +37,6 @@ function FileTree() {
     fetchData()
   }, [])
 
-  useEffect(() => {
-    // 바깥쪽 클릭 시 컨텍스트 메뉴 닫기
-    document.addEventListener("click", handleCloseContextMenu)
-    return () => {
-      document.removeEventListener("click", handleCloseContextMenu)
-    }
-  }, [])
-
   const handleCloseContextMenu = () => {
     setContextMenu(null)
   }
@@ -56,12 +49,6 @@ function FileTree() {
     }
   }, [])
 
-  // const handleDeleteItem = () => {
-  //   if (contextMenu) {
-  //     dataProvider.removeItem(contextMenu.itemIndex)
-  //     setContextMenu(null) // 컨텍스트 메뉴 닫기
-  //   }
-  // }
   const injectItem = () => {
     const parentId = "root" // 예시로 'root'를 사용, 실제 사용 시 적절한 부모 ID 사용
     dataProvider && dataProvider.injectItem(parentId, "New Item")
@@ -152,7 +139,7 @@ function FileTree() {
                   setActiveFileContent(item.content) // 활성 파일 내용 설정
                 } else {
                   // 새 탭을 추가하고 활성화합니다.
-                  addTab({ data: item.data, content: item.content, id: item.id })
+                  addTab({ data: item.data, content: item.content, id: item.id, index: item.index })
                   setActiveFile(item.data)
                   setActiveFileContent(item.content)
                 }
@@ -219,6 +206,16 @@ function FileTree() {
           y={contextMenu.y}
           onDelete={() => {
             dataProvider.removeItem(contextMenu.itemIndex)
+            console.log(contextMenu.itemIndex)
+            // 탭 목록에서 contextMenu.itemIndex에 해당하는 탭 데이터 찾기
+            const tabToRemove = tabs.find(tab => tab.index === contextMenu.itemIndex) // 예시로 id를 사용합니다. 실제 구현은 달라질 수 있습니다.
+            console.log(tabToRemove)
+
+            // 해당 탭 데이터가 있으면 removeTab 호출
+            if (tabToRemove) {
+              removeTab(tabToRemove.data) // removeTab은 탭 데이터를 인수로 받습니다.
+            }
+
             setContextMenu(null) // 컨텍스트 메뉴 숨기기
           }}
         />

@@ -36,10 +36,13 @@ const IDEContent = () => {
     setActiveFileContent(tabContent)
   }
 
-  // activeFile 상태 변경 감지
   useEffect(() => {
-    console.log(`현재 활성 탭: ${activeFile}`)
-  }, [activeFile])
+    // activeFile 값을 기준으로 현재 활성 탭 찾기
+    const activeTab = tabs.find(tab => tab.data === activeFile)
+
+    // 현재 활성 탭의 정보 콘솔에 출력
+    console.log(`현재 활성 탭:`, activeTab)
+  }, [activeFile, tabs]) // 의존성 배열에 tabs도 포함시켜서 tabs 배열이 변경될 때도 반응하도록 함
 
   return (
     <div className="flex h-screen bg-slate-600">
