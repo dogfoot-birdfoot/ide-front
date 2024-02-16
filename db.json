@@ -3,14 +3,22 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": ["uuid-folder1", "uuid-file1"],
+      "children": [
+        "uuid-folder1",
+        "0.7902507144031372",
+        "0.1552321419704792"
+      ],
       "data": "Root Directory",
       "parentId": null
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": ["uuid-file2", "uuid-file3"],
+      "children": [
+        "uuid-file2",
+        "uuid-file1",
+        "uuid-file3"
+      ],
       "data": "First Folder",
       "parentId": "root"
     },
@@ -19,7 +27,7 @@
       "isFolder": false,
       "children": [],
       "data": "Second File",
-      "content": "Content of the second file inside the first folder.",
+      "content": "import React from \"react\"\n\nconst ChatInputForm = () => {\n  const sendMessage = (e: any) => {\n    const textarea = document.getElementById(\"chatMessage\") as HTMLTextAreaElement\n    textarea.value = \"\"\n    e.preventDefault()\n  }\n\n  const pressEnter = (e: React.KeyboardEvent) => {\n    if (e.keyCode === 13 && e.shiftKey == false) {\n      if (!e.repeat) {\n        const textarea = document.getElementById(\"chatMessage\") as HTMLTextAreaElement\n        textarea.value = \"\"\n        // submit Event\n      }\n\n      e.preventDefault()\n    }\n  }\n\n  return (\n    <form className=\"flex justify-center items-center border-t h-1/6 pt-2 pb-2 h-20 border-gray-400\">\n      <textarea\n        id=\"chatMessage\"\n        onKeyDown={pressEnter}\n        className=\"border text-sm border-gray-400 w-5/6 h-full rounded-md break-words\"\n      ></textarea>\n      <button className=\"select-none ml-2 w-6 h-6 rounded-full bg-gray-300\" onClick={sendMessage}>\n        S\n      </button>\n    </form>\n  )\n}\n\nexport default ChatInputForm\n",
       "parentId": "uuid-folder1"
     },
     "uuid-file3": {
@@ -36,7 +44,25 @@
       "children": [],
       "data": "First File",
       "content": "Content of the first file inside the first folder.",
-      "parentId": "root"
+      "parentId": "uuid-folder1"
+    },
+    "0.7902507144031372": {
+      "data": "New Item",
+      "index": "0.7902507144031372",
+      "parentId": "root",
+      "children": [],
+      "isFolder": false,
+      "depth": null,
+      "content": ""
+    },
+    "0.1552321419704792": {
+      "data": "New Item",
+      "index": "0.1552321419704792",
+      "parentId": "root",
+      "children": [],
+      "isFolder": false,
+      "depth": null,
+      "content": ""
     }
   },
   "projects": [
