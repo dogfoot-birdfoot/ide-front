@@ -44,17 +44,11 @@ export const ActiveFileProvider: React.FC<ActiveFileProviderProps> = ({ children
     setTabs(prevTabs => {
       const tabIndex = prevTabs.findIndex(tab => tab.data === tabData)
       const updatedTabs = prevTabs.filter(tab => tab.data !== tabData)
-      console.log(updatedTabs)
-      console.log(activeFileContent)
-      console.log(activeFile)
-      console.log(tabData)
 
       if (activeFile === tabData && updatedTabs.length > 0) {
         const newActiveIndex = tabIndex >= updatedTabs.length ? updatedTabs.length - 1 : tabIndex
         const newActiveTab = updatedTabs[newActiveIndex]
-        console.log("dddd")
-        console.log(newActiveTab.data)
-        console.log(newActiveTab.content)
+
         setActiveFile(newActiveTab.data)
         setActiveFileContent(newActiveTab.content)
       } else if (updatedTabs.length === 0) {
