@@ -24,7 +24,7 @@ const IDEPage = () => {
 const IDEContent = () => {
   const isFileTreeVisible = useSelector((state: RootState) => state.fileTree.value)
   const dispatch = useDispatch()
-  const { tabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent, removeTab } = useActiveFile()
+  const { tabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent, handleRemoveTab } = useActiveFile()
 
   const toggleFileTree = () => {
     dispatch(toggleTreeVisible())
@@ -72,7 +72,7 @@ const IDEContent = () => {
               <button
                 onClick={e => {
                   e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
-                  removeTab(tab.data)
+                  handleRemoveTab(tab.data)
                 }}
                 className="ml-3"
               >
