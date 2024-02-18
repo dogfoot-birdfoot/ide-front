@@ -16,9 +16,14 @@ import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
 import NameModal from "../modal/NameModal"
+import { useDispatch, useSelector } from "react-redux"
+import { setInitialData } from "@/pages/IDEPage/InitialDataSlice"
+import { RootState } from "store"
 
 function FileTree() {
-  const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
+  const initialData = useSelector((state: RootState) => state.initialData.value)
+  const dispatch = useDispatch()
+
   const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =
     useActiveFile()
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
@@ -32,7 +37,7 @@ function FileTree() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3001/files")
-        setInitialData(response.data)
+        dispatch(setInitialData(response.data))
       } catch (error) {
         console.error("Error fetching data:", error)
       }
@@ -89,7 +94,7 @@ function FileTree() {
         await axios.put("http://localhost:3001/files", updatedFileStructure)
         console.log("File content updated successfully.")
         const response = await axios.get("http://localhost:3001/files")
-        setInitialData(response.data)
+        dispatch(setInitialData(response.data))
       } catch (error) {
         console.error("Error updating file content:", error)
       }

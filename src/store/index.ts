@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
 import chatButtonReducer from "@/pages/IDEPage/ChatButtonSlice"
 import fileTreeReducer from "@/pages/IDEPage/FileTreeSlice"
+import InitialDataSlice from "@/pages/IDEPage/InitialDataSlice"
 
 export const store = configureStore({
   reducer: {
     chatButton: chatButtonReducer,
-    fileTree: fileTreeReducer
+    fileTree: fileTreeReducer,
+    initialData: InitialDataSlice
   }
 })
 

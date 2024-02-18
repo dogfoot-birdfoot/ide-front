@@ -8,7 +8,7 @@ import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
 import { FileStructureProvider } from "context/FileStructureContext"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
-import { toggleTreeVisible } from "./FileTreeSlice"
+import { toggleTreeVisible } from "@/pages/IDEPage/FileTreeSlice"
 import Loading from "@/components/editor/Loading"
 
 const IDEPage = () => {
