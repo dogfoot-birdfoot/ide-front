@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from "react"
+import { useSelector } from "react-redux"
 import { toast } from "react-toastify"
+import { RootState } from "store"
 
 interface Tab {
   data: string
@@ -13,7 +15,7 @@ interface ActiveFileContextType {
   setActiveFile: Dispatch<SetStateAction<string>>
   addTab: (tab: Tab) => void
   removeTab: (tabName: string) => void
-  handleRemoveTab: (tabName: string) => void
+  handleRemoveTab: (tabName: string, tabContent: string) => void
   tabs: Tab[]
   setTabs: Dispatch<SetStateAction<Tab[]>>
   activeFileContent: string
@@ -35,12 +37,25 @@ interface ActiveFileProviderProps {
 }
 
 export const ActiveFileProvider: React.FC<ActiveFileProviderProps> = ({ children }) => {
+  const initialData = useSelector((state: RootState) => state.initialData.value)
   const [activeFile, setActiveFile] = useState<string>("")
   const [tabs, setTabs] = useState<Tab[]>([])
   const [activeFileContent, setActiveFileContent] = useState<string>("")
 
   const addTab = (newTab: Tab) => {
     setTabs(prevTabs => [...prevTabs, newTab])
+  }
+
+  const isTabModified = (tabData: string, tabContent: string) => {
+    const objectKeys = Object.keys(initialData)
+    for (const key in objectKeys) {
+      // 현재 탭에 해당하는 파일을 찾음, tabs의 Content가 항상 저장될 시 기능 추가
+      if (initialData[objectKeys[key]].data === tabData) {
+        console.log(initialData[objectKeys[key]].content === tabContent)
+      }
+    }
+
+    console.log("tabs : ", tabs)
   }
 
   const removeTab = (tabData: string) => {
@@ -63,7 +78,7 @@ export const ActiveFileProvider: React.FC<ActiveFileProviderProps> = ({ children
     })
   }
 
-  const handleRemoveTab = (tabData: string) => {
+  const handleRemoveTab = (tabData: string, tabContent: string) => {
     toast(
       ({ closeToast }) => (
         <div className="max-w-md w-full bg-white rounded-lg pointer-events-auto flex flex-col items-center">
@@ -72,6 +87,7 @@ export const ActiveFileProvider: React.FC<ActiveFileProviderProps> = ({ children
             <div className="mt-4 flex justify-center space-x-2">
               <button
                 onClick={() => {
+                  isTabModified(tabData, tabContent)
                   removeTab(tabData)
                   closeToast()
                 }}
