@@ -1,53 +1,53 @@
+import { FitAddon } from "@xterm/addon-fit"
 import React, { useEffect, useRef } from "react"
 import { Terminal } from "xterm"
 import "xterm/css/xterm.css"
-import { FitAddon } from "@xterm/addon-fit"
 
-const TerminalComponent: React.FC = React.memo(() => {
-  const terminalRef = useRef<HTMLDivElement>(null)
+const TerminalComponent: React.FC = () => {
+  const terminalRef = useRef<HTMLDivElement>(null) // 터미널을 위한 ref 생성
 
   useEffect(() => {
     const terminal = new Terminal({
-      cursorBlink: true,
+      cursorBlink: true, // 커서 깜빡임 활성화
       convertEol: true
     })
     const fitAddon = new FitAddon()
 
-    requestAnimationFrame(() => {
-      if (terminalRef.current) {
-        terminal.loadAddon(fitAddon)
-        terminal.open(terminalRef.current)
-        fitAddon.fit()
-        terminal.focus()
+    if (terminalRef.current) {
+      terminal.loadAddon(fitAddon)
+      terminal.open(terminalRef.current)
+      fitAddon.fit()
+      terminal.focus()
 
-        terminal.onData(data => {
-          if (data.charCodeAt(0) === 13) {
-            terminal.write("\r\n$ ")
-          } else if (data.charCodeAt(0) === 127) {
-            const cursorX = terminal.buffer.active.cursorX - 1
-            if (cursorX >= 0) {
-              terminal.write("\b \b")
-            }
-          } else {
-            terminal.write(data)
+      // 터미널 입력 처리 예제
+      terminal.onData(data => {
+        if (data.charCodeAt(0) === 13) {
+          terminal.write("\r\n$ ") // 새 줄에 프롬프트를 표시합니다.
+        } else if (data.charCodeAt(0) === 127) {
+          // 백스페이스 입력 처리
+          const cursorX = terminal.buffer.active.cursorX - 1
+          if (cursorX >= 0) {
+            terminal.write("\b \b") // 백스페이스를 누르면 이전 문자를 지웁니다.
           }
-        })
-        terminal.writeln("Hello from xterm.js")
-      }
-    })
+        } else {
+          terminal.write(data)
+        }
+      })
+
+      // 터미널에 텍스트 출력 예제
+      terminal.writeln("Hello from xterm.js")
+    }
 
     return () => {
-      terminal.dispose()
+      terminal.dispose() // 컴포넌트 언마운트 시 터미널 인스턴스 정리
     }
   }, [])
 
   return (
-    <div className="text-white pl-5 bg-black">
+    <div className=" pl-5 bg-black w-full">
       <div ref={terminalRef} />
     </div>
   )
-})
-
-TerminalComponent.displayName = "TerminalComponent"
+}
 
 export default TerminalComponent
