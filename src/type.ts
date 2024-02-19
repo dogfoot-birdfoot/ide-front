@@ -76,5 +76,5 @@ export interface Tab {
   content: string
   id: number
   index: string
-  isModified?: boolean
+  isModified: boolean
 }

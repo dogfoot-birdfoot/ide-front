@@ -75,7 +75,7 @@ const IDEContent = () => {
               <button
                 onClick={e => {
                   e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
-                  handleRemoveTab(tab.data, tab.content)
+                  handleRemoveTab(tab.data, tab.content, tab.isModified)
                 }}
                 className={tab.isModified ? "ml-1 align-middle" : "ml-3 align-middle"}
               >
