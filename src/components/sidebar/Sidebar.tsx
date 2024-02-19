@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail, containers }) =>
       <div>
         <div className="flex justify-between">
           <div className="flex items-center mb-2">
-            <FontAwesomeIcon icon={faRocket} className="text-lg text-gray-500 mr-2 " />
+            <FontAwesomeIcon icon={faRocket} className="text-xl text-lime-700 mr-2" />
             <h3 className="font-semibold mb-2">스페이스</h3>
           </div>
           <div>

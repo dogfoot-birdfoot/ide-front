@@ -1,23 +1,21 @@
-import React, { useState } from "react"
+import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faJava, faJsSquare, faPython, faCuttlefish } from "@fortawesome/free-brands-svg-icons"
 import { faPenToSquare, faTimes } from "@fortawesome/free-solid-svg-icons"
-import { faFileCode } from "@fortawesome/free-regular-svg-icons" // 기본 아이콘
 import { useNavigate } from "react-router-dom"
 import { ContainerFormProps } from "type"
 
 const getLanguageIcon = (language: string) => {
   switch (language) {
     case "Java":
-      return faJava
+      return "/java.png"
     case "JavaScript":
-      return faJsSquare
+      return "/js.png"
     case "Python":
-      return faPython
+      return "/python.png"
     case "C++":
-      return faCuttlefish // C++에 대한 아이콘으로 faCuttlefish 사용(실제 C++ 아이콘은 없음)
+      return "/cpp.png"
     default:
-      return faFileCode // 기본 아이콘
+      return "/file.png"
   }
 }
 
@@ -31,7 +29,6 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
   onEdit,
   onDelete
 }) => {
-  const languageIcon = getLanguageIcon(language)
   const navigation = useNavigate()
 
   return (
@@ -48,8 +45,8 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
         <div className="text-gray-800 font-bold text-xl mb-2">{name}</div>
         <p className="text-gray-600 text-base">#{number} 컨테이너</p>
         <div className="flex items-center text-gray-600 text-base">
-          <FontAwesomeIcon icon={languageIcon} className="mr-2" />
-          {language}
+          <img src={getLanguageIcon(language)} alt={`${language} Icon`} style={{ width: "20px", height: "20px" }} />
+          <p className="pl-2">{language}</p>
         </div>
         <p className="text-gray-600 text-sm">최근 수정: {lastModified}</p>
         <p className="text-gray-600 text-sm">설명: {description}</p> {/* 설명 추가 */}
@@ -66,6 +63,3 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
 }
 
 export default ContainerForm
-// function setContainers(arg0: (prevContainers: any) => any) {
-//   throw new Error("Function not implemented.")
-// }
