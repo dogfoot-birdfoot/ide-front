@@ -65,16 +65,19 @@ const IDEContent = () => {
           {tabs.map(tab => (
             <div
               key={tab.id}
-              className={`p-2  ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
+              className={`p-2     ${isTabActive(tab.data) ? "flex bg-white text-gray-900" : "flex bg-gray-700 text-white"}`}
               onClick={() => handleTabClick(tab.data, tab.content)}
             >
-              {tab.data}
+              <span className="align-middle text-gray-200">
+                {tab.data}
+                {tab.isModified ? <span className="text-2xs align-middle pl-2 select-none">●</span> : ""}
+              </span>
               <button
                 onClick={e => {
                   e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
                   handleRemoveTab(tab.data, tab.content)
                 }}
-                className="ml-3"
+                className={tab.isModified ? "ml-1 align-middle" : "ml-2 align-middle"}
               >
                 <FontAwesomeIcon icon={faTimesCircle} />
               </button>

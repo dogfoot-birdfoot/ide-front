@@ -159,7 +159,7 @@ function FileTree() {
                   setActiveFileContent(item.content) // 활성 파일 내용 설정
                 } else {
                   // 새 탭을 추가하고 활성화합니다.
-                  addTab({ data: item.data, content: item.content, id: item.id, index: item.index })
+                  addTab({ data: item.data, content: item.content, id: item.id, index: item.index, isModified: false })
                   setActiveFile(item.data)
                   setActiveFileContent(item.content)
                 }
