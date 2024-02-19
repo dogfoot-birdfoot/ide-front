@@ -6,7 +6,7 @@ import "xterm/css/xterm.css"
 // 테마 객체 정의 (요소마다 알아서 적용됨)
 const xtermjsTheme = {
   foreground: "#F8F8F8",
-  background: "#2D2E2C",
+  background: "#2e3235",
   selectionBackground: "#5DA5D533",
   selectionInactiveBackground: "#555555AA"
 }
@@ -54,7 +54,7 @@ const TerminalComponent: React.FC = () => {
 
   return (
     <div>
-      <div className="pl-5" style={{ background: "#2D2E2C" }} ref={terminalRef} />
+      <div className="pl-5" style={{ background: "#2e3235", height: "200px", overflowY: "auto" }} ref={terminalRef} />
     </div>
   )
 }
