@@ -67,5 +67,13 @@ export interface ContextMenuState {
   itemIndex: string | number
 }
 export interface EditorProps {
-  value: string // 'value' prop 타입을 string으로 정의
+  data: string
+  content: string // 'value' prop 타입을 string으로 정의
+}
+
+export interface Tab {
+  data: string
+  content: string
+  id: number
+  index: string
 }

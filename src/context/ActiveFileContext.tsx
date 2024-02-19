@@ -2,13 +2,7 @@ import React, { createContext, useContext, useState, ReactNode, Dispatch, SetSta
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify"
 import { RootState } from "store"
-
-interface Tab {
-  data: string
-  content: string
-  id: number
-  index: string
-}
+import { Tab } from "type"
 
 interface ActiveFileContextType {
   activeFile: string

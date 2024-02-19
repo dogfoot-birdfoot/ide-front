@@ -82,7 +82,7 @@ const IDEContent = () => {
           ))}
         </div>
 
-        {tabs.length > 0 ? <Editor value={activeFileContent} /> : <Loading />}
+        {tabs.length > 0 ? <Editor data={activeFile} content={activeFileContent} /> : <Loading />}
       </div>
     </div>
   )
