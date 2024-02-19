@@ -155,8 +155,8 @@ function FileTree() {
 
                 // 이미 열린 탭이 있다면, 해당 탭의 내용을 활성화만 합니다.
                 if (existingTab) {
-                  setActiveFile(item.data) // 활성 파일 식별자 설정
-                  setActiveFileContent(item.content) // 활성 파일 내용 설정
+                  setActiveFile(existingTab.data) // 활성 파일 식별자 설정
+                  setActiveFileContent(existingTab.content) // 활성 파일 내용 설정
                 } else {
                   // 새 탭을 추가하고 활성화합니다.
                   addTab({ data: item.data, content: item.content, id: item.id, index: item.index, isModified: false })
