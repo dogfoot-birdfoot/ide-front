@@ -88,9 +88,9 @@ const IDEContent = () => {
             {tabs.length > 0 ? <Editor value={activeFileContent} /> : <Loading />}
           </div>
 
-          <div className="max-w-full ml-6">
-            <p className="bg-black text-white pl-5">Terminal</p>
-            <div className="h-65">
+          <div className="w-full  ml-6">
+            <p className="bg-gray-900 text-white pl-5">✨Terminal</p>
+            <div style={{ height: "200px" }}>
               <TerminalComponent />
             </div>
           </div>
