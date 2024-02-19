@@ -2,14 +2,8 @@ import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
 import { Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faFileAlt,
-  faFileCirclePlus,
-  faFloppyDisk,
-  faFolder,
-  faFolderOpen,
-  faFolderPlus
-} from "@fortawesome/free-solid-svg-icons"
+import { faFileCirclePlus, faFloppyDisk, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
+
 import { useActiveFile } from "../../context/ActiveFileContext"
 import { ContextMenuState } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
@@ -86,7 +80,7 @@ function FileTree() {
       }
 
       try {
-        await axios.put("http://localhost:3001/files", updatedFileStructure)
+        await axios.post("http://localhost:3001/files", updatedFileStructure)
         console.log("File content updated successfully.")
         const response = await axios.get("http://localhost:3001/files")
         setInitialData(response.data)
@@ -167,7 +161,11 @@ function FileTree() {
         renderItemArrow={({ item, context }) =>
           item.isFolder ? (
             <span {...context.arrowProps}>
-              {context.isExpanded ? <FontAwesomeIcon icon={faFolderOpen} /> : <FontAwesomeIcon icon={faFolder} />}
+              {context.isExpanded ? (
+                <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+              ) : (
+                <FontAwesomeIcon icon={faFolder} size="lg" />
+              )}
             </span>
           ) : null
         }
@@ -205,7 +203,38 @@ function FileTree() {
               {...context.interactiveElementProps}
               style={{ whiteSpace: "nowrap", cursor: "pointer", display: "flex", alignItems: "center" }}
             >
-              {item.isFolder ? context.isExpanded ? "" : "" : <FontAwesomeIcon icon={faFileAlt} />}
+              {item.isFolder ? (
+                context.isExpanded ? (
+                  ""
+                ) : (
+                  ""
+                )
+              ) : (
+                <img
+                  src={
+                    item.data.endsWith(".jsx")
+                      ? "/react.png"
+                      : item.data.endsWith(".css")
+                        ? "/css.png"
+                        : item.data.endsWith(".ts")
+                          ? "/typescript.png"
+                          : item.data.endsWith(".html")
+                            ? "/html.png"
+                            : item.data.endsWith(".cpp")
+                              ? "/cplus.png"
+                              : item.data.endsWith(".py")
+                                ? "/python.png"
+                                : item.data.endsWith(".java")
+                                  ? "/java.png"
+                                  : item.data.endsWith(".js")
+                                    ? "/js.png"
+                                    : "/file.png" // 기본 파일 이미지
+                  }
+                  alt="File Icon"
+                  style={{ width: "20px", height: "20px" }}
+                />
+              )}
+
               {arrow}
               {title}
             </span>
