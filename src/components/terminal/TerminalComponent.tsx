@@ -1,4 +1,3 @@
-import { FitAddon } from "@xterm/addon-fit"
 import React, { useEffect, useRef } from "react"
 import { Terminal } from "xterm"
 import "xterm/css/xterm.css"
@@ -20,12 +19,10 @@ const TerminalComponent: React.FC = () => {
       convertEol: true,
       theme: xtermjsTheme // 테마 적용
     })
-    const fitAddon = new FitAddon()
 
     if (terminalRef.current) {
-      terminal.loadAddon(fitAddon)
       terminal.open(terminalRef.current)
-      fitAddon.fit()
+
       terminal.focus()
 
       // 터미널 입력 처리 예제
