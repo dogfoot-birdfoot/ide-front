@@ -3,13 +3,22 @@ import React, { useEffect, useRef } from "react"
 import { Terminal } from "xterm"
 import "xterm/css/xterm.css"
 
+// 테마 객체 정의 (요소마다 알아서 적용됨)
+const xtermjsTheme = {
+  foreground: "#F8F8F8",
+  background: "#2D2E2C",
+  selectionBackground: "#5DA5D533",
+  selectionInactiveBackground: "#555555AA"
+}
+
 const TerminalComponent: React.FC = () => {
   const terminalRef = useRef<HTMLDivElement>(null) // 터미널을 위한 ref 생성
 
   useEffect(() => {
     const terminal = new Terminal({
       cursorBlink: true, // 커서 깜빡임 활성화
-      convertEol: true
+      convertEol: true,
+      theme: xtermjsTheme // 테마 적용
     })
     const fitAddon = new FitAddon()
 
@@ -44,8 +53,8 @@ const TerminalComponent: React.FC = () => {
   }, [])
 
   return (
-    <div className=" pl-5 bg-black w-full">
-      <div ref={terminalRef} />
+    <div>
+      <div className="pl-5" style={{ background: "#2D2E2C" }} ref={terminalRef} />
     </div>
   )
 }
