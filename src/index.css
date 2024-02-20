@@ -2,3 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 @import "react-toastify/dist/ReactToastify.css";
+
+/* 모든 스크롤바에 대한 스타일 */
+::-webkit-scrollbar {
+  width: 15px; /* 스크롤바의 너비 */
+}
+
+/* 스크롤바 트랙 (바탕) 스타일 */
+::-webkit-scrollbar-track {
+  background: #2e3235; /* 스크롤바 트랙의 배경색 */
+}
+
+/* 스크롤바 핸들 (움직이는 부분) 스타일 */
+::-webkit-scrollbar-thumb {
+  background-color: #555; /* 스크롤바 핸들의 색상 */
+  border-radius: 6px; /* 스크롤바 핸들의 모서리 둥글기 */
+  border: 3px solid #2e3235; /* 스크롤바 핸들 주변의 테두리 (트랙과 같은 색으로 설정하여 핸들만 보이도록) */
+}
+
+/* 스크롤바 핸들이 호버될 때의 스타일 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #666; /* 스크롤바 핸들의 호버 색상 */
+}

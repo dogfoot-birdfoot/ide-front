@@ -41,7 +41,8 @@
     "tailwind-scrollbar-hide": "^1.1.7",
     "typescript": "^4.9.5",
     "uuid": "^9.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xterm": "^5.4.0-beta.37"
   },
   "scripts": {
     "start": "craco start",
