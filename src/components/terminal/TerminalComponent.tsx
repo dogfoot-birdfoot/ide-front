@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react"
 import { Terminal } from "xterm"
 import "xterm/css/xterm.css"
 
-// 테마 객체 정의 (요소마다 알아서 적용됨)
 const xtermjsTheme = {
   foreground: "#F8F8F8",
   background: "#2e3235",
@@ -11,41 +10,48 @@ const xtermjsTheme = {
 }
 
 const TerminalComponent: React.FC = () => {
-  const terminalRef = useRef<HTMLDivElement>(null) // 터미널을 위한 ref 생성
+  const terminalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    console.log("useEffect - Component Mounted")
+
     const terminal = new Terminal({
-      cursorBlink: true, // 커서 깜빡임 활성화
+      cursorBlink: true,
       convertEol: true,
-      theme: xtermjsTheme // 테마 적용
+      theme: xtermjsTheme
     })
 
+    console.log("Terminal instance created")
+
     if (terminalRef.current) {
+      console.log("terminalRef.current is not null, opening terminal")
+
       terminal.open(terminalRef.current)
-
       terminal.focus()
+      console.log("Terminal opened and focused")
 
-      // 터미널 입력 처리 예제
       terminal.onData(data => {
+        console.log(`Data received: ${data}`)
         if (data.charCodeAt(0) === 13) {
-          terminal.write("\r\n$ ") // 새 줄에 프롬프트를 표시합니다.
+          terminal.write("\r\n$ ")
         } else if (data.charCodeAt(0) === 127) {
-          // 백스페이스 입력 처리
           const cursorX = terminal.buffer.active.cursorX - 1
           if (cursorX >= 0) {
-            terminal.write("\b \b") // 백스페이스를 누르면 이전 문자를 지웁니다.
+            terminal.write("\b \b")
           }
         } else {
           terminal.write(data)
         }
       })
 
-      // 터미널에 텍스트 출력 예제
       terminal.writeln("Hello from xterm.js")
+    } else {
+      console.log("terminalRef.current is null")
     }
 
     return () => {
-      terminal.dispose() // 컴포넌트 언마운트 시 터미널 인스턴스 정리
+      console.log("Cleaning up terminal instance")
+      terminal.dispose()
     }
   }, [])
 
