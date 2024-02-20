@@ -226,10 +226,8 @@ function FileTree() {
           y={contextMenu.y}
           onDelete={() => {
             dataProvider.removeItem(contextMenu.itemIndex)
-            console.log(contextMenu.itemIndex)
             // 탭 목록에서 contextMenu.itemIndex에 해당하는 탭 데이터 찾기
             const tabToRemove = tabs.find(tab => tab.index === contextMenu.itemIndex) // 예시로 id를 사용합니다. 실제 구현은 달라질 수 있습니다.
-            console.log(tabToRemove)
 
             // 해당 탭 데이터가 있으면 removeTab 호출
             if (tabToRemove) {
