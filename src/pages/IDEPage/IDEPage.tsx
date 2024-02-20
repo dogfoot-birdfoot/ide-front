@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
 import { toggleTreeVisible } from "./FileTreeSlice"
 import Loading from "@/components/editor/Loading"
+import { getFileIconPath } from "@/components/renderingIcons/getFileIconPath"
 import TerminalComponent from "@/components/terminal/TerminalComponent"
 
 const IDEPage = () => {
@@ -46,57 +47,58 @@ const IDEContent = () => {
   }, [activeFile, tabs]) // 의존성 배열에 tabs도 포함시켜서 tabs 배열이 변경될 때도 반응하도록 함
 
   return (
-    <>
-      <div className="flex h-screen bg-slate-600">
-        <div className={`transition-width duration-500 ${isFileTreeVisible ? "w-64" : "w-0"} overflow-auto `}>
-          <FileTree />
-        </div>
+    <div className="flex h-screen bg-slate-600">
+      <div className={`transition-width duration-500 ${isFileTreeVisible ? "w-64" : "w-0"} overflow-auto`}>
+        <FileTree />
+      </div>
 
-        <button
-          onClick={toggleFileTree}
-          className="mt-5 ml-[-1.25rem] z-10 p-2 bg-gray-700 text-white hover:bg-blue-800 transition-transform duration-500 "
-          style={{ transform: `translateX(${isFileTreeVisible ? "100%" : "90%"})` }}
-        >
-          {isFileTreeVisible ? "«" : "»"}
-        </button>
+      <button
+        onClick={toggleFileTree}
+        className="mt-5 ml-[-1.25rem] z-20 p-2 bg-gray-700 text-white hover:bg-blue-700 transition-transform duration-500"
+        style={{ transform: `translateX(${isFileTreeVisible ? "100%" : "90%"})` }}
+      >
+        {isFileTreeVisible ? "«" : "»"}
+      </button>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <ChatButton />
 
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <ChatButton />
-
-          <div className="flex-1 overflow-y-auto pl-5 mt-5">
-            <div className="flex ml-1">
-              {tabs.map(tab => (
-                <div
-                  key={tab.id}
-                  className={`p-2  ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
-                  onClick={() => handleTabClick(tab.data, tab.content)}
+        <div className="flex-1 overflow-y-auto pl-5 mt-5">
+          <div className="flex ml-1">
+            {tabs.map(tab => (
+              <div
+                key={tab.id}
+                className={`flex items-center p-2 ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
+                onClick={() => handleTabClick(tab.data, tab.content)}
+              >
+                <img
+                  src={getFileIconPath(tab.data)} // tab.data를 인자로 넘겨 아이콘 경로를 얻습니다.
+                  alt="Icon"
+                  style={{ width: "16px", height: "16px", marginRight: "8px" }} // 아이콘 크기와 마진 조정
+                />
+                <span>{tab.data}</span> {/* 텍스트를 span 태그로 감싸줍니다. */}
+                <button
+                  onClick={e => {
+                    e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
+                    removeTab(tab.data)
+                  }}
+                  className="ml-3"
                 >
-                  {tab.data}
-                  <button
-                    onClick={e => {
-                      e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
-                      removeTab(tab.data)
-                    }}
-                    className="ml-3"
-                  >
-                    <FontAwesomeIcon icon={faTimesCircle} />
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {tabs.length > 0 ? <Editor value={activeFileContent} /> : <Loading />}
+                  <FontAwesomeIcon icon={faTimesCircle} />
+                </button>
+              </div>
+            ))}
           </div>
 
-          <div className=" ml-6">
-            <p className="bg-gray-900 text-white pl-5">✨Terminal</p>
-            <div style={{ height: "200px", width: "100%" }}>
-              <TerminalComponent />
-            </div>
+          {tabs.length > 0 ? <Editor value={activeFileContent} /> : <Loading />}
+        </div>
+        <div className=" ml-6">
+          <p className="bg-gray-900 text-white pl-5">✨Terminal</p>
+          <div style={{ height: "200px", width: "100%" }}>
+            <TerminalComponent />
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
