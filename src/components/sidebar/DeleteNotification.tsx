@@ -9,7 +9,7 @@ const DeleteNotification: React.FC<{ onDelete: (id: number) => void; id: number 
   }
 
   return (
-    <div className="max-w-md w-full bg-white rounded-lg pointer-events-auto flex flex-col items-center shadow-lg">
+    <div className="max-w-md w-full bg-white  pointer-events-auto flex flex-col items-center ">
       <div className="w-full p-4 text-center">
         <p className="text-sm font-medium text-gray-900">삭제하시겠습니까?</p>
         <div className="mt-4 flex justify-center space-x-2">
