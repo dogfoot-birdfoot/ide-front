@@ -1,8 +1,10 @@
 import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPenToSquare, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom"
 import { ContainerFormProps } from "type"
+import { toast } from "react-toastify"
+import DeleteNotification from "../sidebar/DeleteNotification"
 
 const getLanguageIcon = (language: string) => {
   switch (language) {
@@ -31,6 +33,15 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
 }) => {
   const navigation = useNavigate()
 
+  const handleDeleteClick = () => {
+    toast(<DeleteNotification onDelete={onDelete} id={id} />, {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: true,
+      draggable: false,
+      closeButton: false
+    })
+  }
   return (
     <div className="bg-white p-4 rounded-lg border border-slate-400 flex flex-col justify-between h-55 relative">
       <button onClick={onEdit} className="absolute top-4 right-12 text-gray-400 hover:text-gray-600">
@@ -38,8 +49,8 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
       </button>
 
       {/* 삭제 버튼에 onDelete 함수 연결, 버튼 위치 수정을 위해 right-4 사용 */}
-      <button onClick={() => onDelete(id)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-        <FontAwesomeIcon icon={faTimes} />
+      <button onClick={handleDeleteClick} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+        <FontAwesomeIcon icon={faTrash} />
       </button>
       <div>
         <div className="text-gray-800 font-bold text-xl mb-2">{name}</div>
