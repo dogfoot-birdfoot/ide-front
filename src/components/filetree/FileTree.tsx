@@ -3,13 +3,13 @@ import axios from "axios"
 import { Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileCirclePlus, faFloppyDisk, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
-
 import { useActiveFile } from "../../context/ActiveFileContext"
 import { ContextMenuState } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
 import NameModal from "../modal/NameModal"
+import { getFileIconPath } from "../renderingIcons/getFileIconPath"
 
 function FileTree() {
   const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
@@ -203,36 +203,8 @@ function FileTree() {
               {...context.interactiveElementProps}
               style={{ whiteSpace: "nowrap", cursor: "pointer", display: "flex", alignItems: "center" }}
             >
-              {item.isFolder ? (
-                context.isExpanded ? (
-                  ""
-                ) : (
-                  ""
-                )
-              ) : (
-                <img
-                  src={
-                    item.data.endsWith(".jsx")
-                      ? "/react.png"
-                      : item.data.endsWith(".css")
-                        ? "/css.png"
-                        : item.data.endsWith(".ts")
-                          ? "/typescript.png"
-                          : item.data.endsWith(".html")
-                            ? "/html.png"
-                            : item.data.endsWith(".cpp")
-                              ? "/cplus.png"
-                              : item.data.endsWith(".py")
-                                ? "/python.png"
-                                : item.data.endsWith(".java")
-                                  ? "/java.png"
-                                  : item.data.endsWith(".js")
-                                    ? "/js.png"
-                                    : "/file.png" // 기본 파일 이미지
-                  }
-                  alt="File Icon"
-                  style={{ width: "20px", height: "20px" }}
-                />
+              {!item.isFolder && (
+                <img src={getFileIconPath(item.data)} alt="File Icon" style={{ width: "20px", height: "20px" }} />
               )}
 
               {arrow}

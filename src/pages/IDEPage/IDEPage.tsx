@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
 import { toggleTreeVisible } from "./FileTreeSlice"
 import Loading from "@/components/editor/Loading"
+import { getFileIconPath } from "@/components/renderingIcons/getFileIconPath"
 
 const IDEPage = () => {
   return (
@@ -65,10 +66,15 @@ const IDEContent = () => {
           {tabs.map(tab => (
             <div
               key={tab.id}
-              className={`p-2  ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
+              className={`flex items-center p-2 ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
               onClick={() => handleTabClick(tab.data, tab.content)}
             >
-              {tab.data}
+              <img
+                src={getFileIconPath(tab.data)} // tab.data를 인자로 넘겨 아이콘 경로를 얻습니다.
+                alt="Icon"
+                style={{ width: "16px", height: "16px", marginRight: "8px" }} // 아이콘 크기와 마진 조정
+              />
+              <span>{tab.data}</span> {/* 텍스트를 span 태그로 감싸줍니다. */}
               <button
                 onClick={e => {
                   e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.

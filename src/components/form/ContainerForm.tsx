@@ -3,21 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPenToSquare, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom"
 import { ContainerFormProps } from "type"
-
-const getLanguageIcon = (language: string) => {
-  switch (language) {
-    case "Java":
-      return "/java.png"
-    case "JavaScript":
-      return "/js.png"
-    case "Python":
-      return "/python.png"
-    case "C++":
-      return "/cpp.png"
-    default:
-      return "/file.png"
-  }
-}
+import { getFileIconPath, languageToFileExtension } from "../renderingIcons/getFileIconPath"
 
 const ContainerForm: React.FC<ContainerFormProps> = ({
   id,
@@ -45,7 +31,11 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
         <div className="text-gray-800 font-bold text-xl mb-2">{name}</div>
         <p className="text-gray-600 text-base">#{number} 컨테이너</p>
         <div className="flex items-center text-gray-600 text-base">
-          <img src={getLanguageIcon(language)} alt={`${language} Icon`} style={{ width: "20px", height: "20px" }} />
+          <img
+            src={getFileIconPath(languageToFileExtension(language))}
+            alt={`${language} Icon`}
+            style={{ width: "20px", height: "20px" }}
+          />
           <p className="pl-2">{language}</p>
         </div>
         <p className="text-gray-600 text-sm">최근 수정: {lastModified}</p>
