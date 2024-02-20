@@ -57,7 +57,7 @@ const TerminalComponent: React.FC = () => {
 
   return (
     <div>
-      <div className="pl-5" style={{ background: "#2e3235", height: "200px", overflowY: "auto" }} ref={terminalRef} />
+      <div className="pl-5" style={{ background: "#2e3235", height: "200px" }} ref={terminalRef} />
     </div>
   )
 }
