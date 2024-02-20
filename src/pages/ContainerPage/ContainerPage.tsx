@@ -145,8 +145,6 @@ const ContainerPage: React.FC = () => {
           }
         }}
       />
-
-      {/* 모달 추가 */}
     </div>
   )
 }
