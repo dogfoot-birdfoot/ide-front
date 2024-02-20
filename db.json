@@ -3,20 +3,14 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": [
-        "uuid-folder1"
-      ],
+      "children": ["uuid-folder1"],
       "data": "Root Directory",
       "parentId": null
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": [
-        "uuid-file2",
-        "uuid-file1",
-        "uuid-file3"
-      ],
+      "children": ["uuid-file2", "uuid-file1", "uuid-file3"],
       "data": "First Folder",
       "parentId": "root"
     },
