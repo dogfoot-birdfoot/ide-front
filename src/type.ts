@@ -56,6 +56,12 @@ export type messageProps = {
   id: number
   text: string
 }
+
+export type fileTreeProps = {
+  initialData: any
+  setInitialData: any
+}
+
 export interface ContextMenuProps {
   onDelete: () => void
   x: number
@@ -69,6 +75,7 @@ export interface ContextMenuState {
 export interface EditorProps {
   data: string
   content: string // 'value' prop 타입을 string으로 정의
+  initialData: any
 }
 
 export interface Tab {

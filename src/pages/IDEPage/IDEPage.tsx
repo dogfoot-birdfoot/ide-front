@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import FileTree from "@/components/filetree/FileTree"
 import Editor from "@/components/editor/Editor"
 import ChatButton from "@/components/button/ChatButton"
@@ -25,6 +25,7 @@ const IDEContent = () => {
   const isFileTreeVisible = useSelector((state: RootState) => state.fileTree.value)
   const dispatch = useDispatch()
   const { tabs, activeFile, setActiveFile, activeFileContent, setActiveFileContent, handleRemoveTab } = useActiveFile()
+  const [initData, setInitData] = useState<any>({ root: { children: [], depth: 0 } })
 
   const toggleFileTree = () => {
     dispatch(toggleTreeVisible())
@@ -47,7 +48,7 @@ const IDEContent = () => {
   return (
     <div className="flex h-screen bg-slate-600">
       <div className={`transition-width duration-500 ${isFileTreeVisible ? "w-64" : "w-0"} overflow-auto`}>
-        <FileTree />
+        <FileTree initialData={initData} setInitialData={setInitData} />
       </div>
 
       <button
@@ -85,7 +86,11 @@ const IDEContent = () => {
           ))}
         </div>
 
-        {tabs.length > 0 ? <Editor data={activeFile} content={activeFileContent} /> : <Loading />}
+        {tabs.length > 0 ? (
+          <Editor data={activeFile} content={activeFileContent} initialData={initData} />
+        ) : (
+          <Loading />
+        )}
       </div>
     </div>
   )

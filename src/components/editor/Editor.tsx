@@ -16,13 +16,10 @@ import { javascript } from "@codemirror/lang-javascript"
 import { python } from "@codemirror/lang-python"
 import { cpp } from "@codemirror/lang-cpp"
 import { java } from "@codemirror/lang-java"
-import { useSelector } from "react-redux"
-import { RootState } from "store"
 
-const Editor: React.FC<EditorProps> = ({ data, content }) => {
-  const { tabs, setTabs, activeFile, setActiveFileContent } = useActiveFile()
+const Editor: React.FC<EditorProps> = ({ data, content, initialData }) => {
+  const { tabs, activeFile, setActiveFileContent } = useActiveFile()
   const { setFileStructure } = useFileStructure()
-  const initialData = useSelector((state: RootState) => state.initialData.value)
 
   useEffect(() => {
     const fetchFileStructure = async () => {
@@ -40,25 +37,27 @@ const Editor: React.FC<EditorProps> = ({ data, content }) => {
     // tabs를 parameter로 추가하지 않으면 tabs가 업데이트 되지 않음
     (data: string, activeContent: string, tabs: Tab[]) => {
       // 업데이트 된 tab에 대한 수정
-      setTabs(
-        tabs.map(tab =>
-          tab.data === data
-            ? { data: tab.data, content: activeContent, id: tab.id, index: tab.index, isModified: true }
-            : tab
-        )
-      )
-      // tab에서 content가 바뀐지 확인
 
-      console.log(initialData)
-      // setTabs(
-      //   tabs.map(tab =>
-      //     tab.data === data
-      //       ? activeContent !== content
-      //         ? { data: tab.data, content: activeContent, id: tab.id, index: tab.index, isModified: true }
-      //         : { data: tab.data, content: activeContent, id: tab.id, index: tab.index, isModified: false }
-      //       : tab
-      //   )
-      // )
+      const tabIndex = tabs.findIndex(tab => tab.data === data)
+      let isTabModified = true
+
+      // 현재 선택한 tab과 초기 content를 비교해 바뀐지 확인
+      const objKeys = Object.keys(initialData)
+      for (const key in objKeys) {
+        if (initialData[objKeys[key]].data === data && initialData[objKeys[key]].content === activeContent) {
+          isTabModified = false
+        }
+      }
+
+      if (tabIndex !== undefined) {
+        tabs[tabIndex] = {
+          data: data,
+          content: activeContent,
+          id: tabs[tabIndex].id,
+          index: tabs[tabIndex].index,
+          isModified: isTabModified
+        }
+      }
 
       setActiveFileContent(activeContent) // 변경된 내용을 상태에 저장
     },
