@@ -1,17 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from "react"
-
-interface Tab {
-  data: string
-  content: string
-  id: number
-  index: string
-}
+import { Tab } from "type"
 
 interface ActiveFileContextType {
   activeFile: string
   setActiveFile: Dispatch<SetStateAction<string>>
   addTab: (tab: Tab) => void
   removeTab: (tabName: string) => void
+
   tabs: Tab[]
   setTabs: Dispatch<SetStateAction<Tab[]>>
   activeFileContent: string

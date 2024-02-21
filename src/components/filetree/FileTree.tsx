@@ -4,15 +4,14 @@ import { Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileCirclePlus, faFloppyDisk, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
-import { ContextMenuState } from "type"
+import { ContextMenuState, fileTreeProps } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
 import NameModal from "../modal/NameModal"
 import { getFileIconPath } from "../renderingIcons/getFileIconPath"
 
-function FileTree() {
-  const [initialData, setInitialData] = useState<any>({ root: { children: [], depth: 0 } })
+function FileTree({ initialData, setInitialData }: fileTreeProps) {
   const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =
     useActiveFile()
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null)
@@ -144,11 +143,11 @@ function FileTree() {
 
                 // 이미 열린 탭이 있다면, 해당 탭의 내용을 활성화만 합니다.
                 if (existingTab) {
-                  setActiveFile(item.data) // 활성 파일 식별자 설정
-                  setActiveFileContent(item.content) // 활성 파일 내용 설정
+                  setActiveFile(existingTab.data) // 활성 파일 식별자 설정
+                  setActiveFileContent(existingTab.content) // 활성 파일 내용 설정
                 } else {
                   // 새 탭을 추가하고 활성화합니다.
-                  addTab({ data: item.data, content: item.content, id: item.id, index: item.index })
+                  addTab({ data: item.data, content: item.content, id: item.id, index: item.index, isModified: false })
                   setActiveFile(item.data)
                   setActiveFileContent(item.content)
                 }
@@ -222,10 +221,8 @@ function FileTree() {
           y={contextMenu.y}
           onDelete={() => {
             dataProvider.removeItem(contextMenu.itemIndex)
-            console.log(contextMenu.itemIndex)
             // 탭 목록에서 contextMenu.itemIndex에 해당하는 탭 데이터 찾기
             const tabToRemove = tabs.find(tab => tab.index === contextMenu.itemIndex) // 예시로 id를 사용합니다. 실제 구현은 달라질 수 있습니다.
-            console.log(tabToRemove)
 
             // 해당 탭 데이터가 있으면 removeTab 호출
             if (tabToRemove) {

@@ -6,6 +6,9 @@ module.exports = {
       height: {
         128: "32rem"
       },
+      fontSize: {
+        "2xs": "0.4rem"
+      },
       colors: {
         brown: {
           600: "#E0B88A" // 갈색 계열의 색상 코드
