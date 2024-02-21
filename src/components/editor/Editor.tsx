@@ -21,6 +21,7 @@ import { javascript } from "@codemirror/lang-javascript"
 import { python } from "@codemirror/lang-python"
 import { cpp } from "@codemirror/lang-cpp"
 import { java } from "@codemirror/lang-java"
+import { search } from "@codemirror/search"
 
 const Editor: React.FC<EditorProps> = ({ value }) => {
   const { activeFile, setActiveFileContent } = useActiveFile()
@@ -68,6 +69,7 @@ const Editor: React.FC<EditorProps> = ({ value }) => {
           cpp(),
           java(),
           closeBrackets(),
+          search(), //control+f
           keymap.of([...completionKeymap, ...closeBracketsKeymap]),
           autocompletion({ override: [pythonCompletions, javaCompletions, cppCompletions, javascriptCompletions] }),
           keymap.of(completionKeymap)
