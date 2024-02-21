@@ -2,20 +2,26 @@ import React, { useEffect } from "react"
 import axios from "axios"
 
 import { EditorProps } from "type"
-import { cppCompletions, javaCompletions, pythonCompletions } from "@/components/editor/autocomplete"
+import {
+  cppCompletions,
+  javaCompletions,
+  javascriptCompletions,
+  pythonCompletions
+} from "@/components/editor/autocomplete"
 import { useActiveFile } from "../../context/ActiveFileContext"
 import { useFileStructure } from "../../context/FileStructureContext"
 
 /* Code Mirror */
 import CodeMirror from "@uiw/react-codemirror"
 import { materialDark as material } from "@uiw/codemirror-theme-material"
-import { autocompletion } from "@codemirror/autocomplete"
+import { autocompletion, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete"
 import { keymap } from "@codemirror/view"
 import { completionKeymap } from "@codemirror/autocomplete"
 import { javascript } from "@codemirror/lang-javascript"
 import { python } from "@codemirror/lang-python"
 import { cpp } from "@codemirror/lang-cpp"
 import { java } from "@codemirror/lang-java"
+import { search } from "@codemirror/search"
 
 const Editor: React.FC<EditorProps> = ({ value }) => {
   const { activeFile, setActiveFileContent } = useActiveFile()
@@ -62,7 +68,10 @@ const Editor: React.FC<EditorProps> = ({ value }) => {
           python(),
           cpp(),
           java(),
-          autocompletion({ override: [pythonCompletions, javaCompletions, cppCompletions] }),
+          closeBrackets(),
+          search(), //control+f
+          keymap.of([...completionKeymap, ...closeBracketsKeymap]),
+          autocompletion({ override: [pythonCompletions, javaCompletions, cppCompletions, javascriptCompletions] }),
           keymap.of(completionKeymap)
         ]}
       />

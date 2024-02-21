@@ -104,3 +104,37 @@ export const cppCompletions = completeFromList([
   { label: "throw", type: "keyword", detail: "Throw an exception" }
   // 추가적인 C++ 자동완성 항목...
 ])
+export const javascriptCompletions = completeFromList([
+  { label: "function", type: "keyword", detail: "Define a function" },
+  { label: "var", type: "keyword", detail: "Declare a variable (function-scoped)" },
+  { label: "let", type: "keyword", detail: "Declare a block-scoped local variable" },
+  { label: "const", type: "keyword", detail: "Declare a block-scoped, read-only named constant" },
+  { label: "if", type: "keyword", detail: "Conditional statement" },
+  { label: "else", type: "keyword", detail: "Alternative conditional statement" },
+  { label: "for", type: "keyword", detail: "For loop" },
+  { label: "while", type: "keyword", detail: "While loop" },
+  { label: "do", type: "keyword", detail: "Do-while loop" },
+  { label: "switch", type: "keyword", detail: "Switch statement" },
+  { label: "case", type: "keyword", detail: "Case in a switch statement" },
+  { label: "default", type: "keyword", detail: "Default case in a switch statement" },
+  { label: "try", type: "keyword", detail: "Try block for error handling" },
+  { label: "catch", type: "keyword", detail: "Catch block for handling exceptions" },
+  { label: "finally", type: "keyword", detail: "Finally block for specifying code to run regardless of an error" },
+  { label: "throw", type: "keyword", detail: "Throw an exception" },
+  { label: "return", type: "keyword", detail: "Return statement" },
+  { label: "break", type: "keyword", detail: "Break out of the current loop or switch" },
+  { label: "continue", type: "keyword", detail: "Skip the rest of the loop iteration" },
+  { label: "typeof", type: "keyword", detail: "Determine the type of a variable" },
+  { label: "new", type: "keyword", detail: "Create an instance of an object" },
+  { label: "this", type: "keyword", detail: "Reference the current object" },
+  { label: "class", type: "keyword", detail: "Declare a class" },
+  { label: "extends", type: "keyword", detail: "Inherit from a parent class" },
+  { label: "super", type: "keyword", detail: "Call the parent class constructor" },
+  { label: "import", type: "keyword", detail: "Import modules" },
+  { label: "export", type: "keyword", detail: "Export modules" },
+  { label: "console.log", type: "function", detail: "Output information to the console" },
+  { label: "alert", type: "function", detail: "Display an alert dialog" },
+  { label: "document.getElementById", type: "function", detail: "Select an element by its ID" },
+  { label: "addEventListener", type: "function", detail: "Attach an event handler to an element" }
+  // Additional JavaScript completions...
+])
