@@ -12,6 +12,8 @@ import { toggleTreeVisible } from "@/pages/IDEPage/FileTreeSlice"
 import Loading from "@/components/editor/Loading"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { getFileIconPath } from "@/components/renderingIcons/getFileIconPath"
+import TerminalComponent from "@/components/terminal/TerminalComponent"
 
 const IDEPage = () => {
   return (
@@ -149,39 +151,51 @@ const IDEContent = () => {
       >
         {isFileTreeVisible ? "«" : "»"}
       </button>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <ChatButton />
 
-      <ChatButton />
-
-      <div className="flex-1 overflow-y-auto pl-5 mt-5">
-        <div className="flex ml-1">
-          {tabs.map(tab => (
-            <div
-              key={tab.id}
-              className={`p-2     ${isTabActive(tab.data) ? "flex bg-white text-gray-900" : "flex bg-gray-700 text-white"}`}
-              onClick={() => handleTabClick(tab.data, tab.content)}
-            >
-              <span className="align-middle text-gray-200">
-                {tab.data}
-                {tab.isModified ? <span className="text-2xs align-middle pl-2 select-none">●</span> : ""}
-              </span>
-              <button
-                onClick={e => {
-                  e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
-                  handleRemoveTab(tab.data, tab.content, tab.isModified)
-                }}
-                className={tab.isModified ? "ml-1 align-middle" : "ml-3 align-middle"}
+        <div className="flex-1 overflow-y-auto pl-5 mt-5">
+          <div className="flex ml-1">
+            {tabs.map(tab => (
+              <div
+                key={tab.id}
+                className={`flex items-center p-2 ${isTabActive(tab.data) ? "bg-white text-gray-900" : "bg-gray-700 text-white"}`}
+                onClick={() => handleTabClick(tab.data, tab.content)}
               >
-                <FontAwesomeIcon icon={faTimesCircle} />
-              </button>
-            </div>
-          ))}
-        </div>
+                <img
+                  src={getFileIconPath(tab.data)} // tab.data를 인자로 넘겨 아이콘 경로를 얻습니다.
+                  alt="Icon"
+                  style={{ width: "16px", height: "16px", marginRight: "8px" }} // 아이콘 크기와 마진 조정
+                />
+                <span className="align-middle text-gray-200">
+                  {tab.data}
+                  {tab.isModified ? <span className="text-2xs align-middle pl-2 select-none">●</span> : ""}
+                </span>
+                <button
+                  onClick={e => {
+                    e.stopPropagation() // 버튼 클릭 시 이벤트가 상위로 전파되지 않도록 합니다.
+                    handleRemoveTab(tab.data, tab.content, tab.isModified)
+                  }}
+                  className={tab.isModified ? "ml-1 align-middle" : "ml-3 align-middle"}
+                >
+                  <FontAwesomeIcon icon={faTimesCircle} />
+                </button>
+              </div>
+            ))}
+          </div>
 
-        {tabs.length > 0 ? (
-          <Editor data={activeFile} content={activeFileContent} initialData={initData} />
-        ) : (
-          <Loading />
-        )}
+          {tabs.length > 0 ? (
+            <Editor data={activeFile} content={activeFileContent} initialData={initData} />
+          ) : (
+            <Loading />
+          )}
+        </div>
+        <div className=" ml-6">
+          <p className="bg-gray-900 text-white pl-5">✨Terminal</p>
+          <div style={{ height: "200px", width: "100%" }}>
+            <TerminalComponent />
+          </div>
+        </div>
       </div>
     </div>
   )

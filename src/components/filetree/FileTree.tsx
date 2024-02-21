@@ -2,20 +2,14 @@ import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
 import { Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faFileAlt,
-  faFileCirclePlus,
-  faFloppyDisk,
-  faFolder,
-  faFolderOpen,
-  faFolderPlus
-} from "@fortawesome/free-solid-svg-icons"
+import { faFileCirclePlus, faFloppyDisk, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
 import { useActiveFile } from "../../context/ActiveFileContext"
 import { ContextMenuState, fileTreeProps } from "type"
 import ContextMenu from "@/components/filetree/ContextMenu"
 import { useFileStructure } from "context/FileStructureContext"
 import CustomDataProvider from "@/components/filetree/CustomDataProvider"
 import NameModal from "../modal/NameModal"
+import { getFileIconPath } from "../renderingIcons/getFileIconPath"
 
 function FileTree({ initialData, setInitialData }: fileTreeProps) {
   const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =
@@ -85,7 +79,7 @@ function FileTree({ initialData, setInitialData }: fileTreeProps) {
       }
 
       try {
-        await axios.put("http://localhost:3001/files", updatedFileStructure)
+        await axios.post("http://localhost:3001/files", updatedFileStructure)
         console.log("File content updated successfully.")
         const response = await axios.get("http://localhost:3001/files")
         setInitialData(response.data)
@@ -166,7 +160,11 @@ function FileTree({ initialData, setInitialData }: fileTreeProps) {
         renderItemArrow={({ item, context }) =>
           item.isFolder ? (
             <span {...context.arrowProps}>
-              {context.isExpanded ? <FontAwesomeIcon icon={faFolderOpen} /> : <FontAwesomeIcon icon={faFolder} />}
+              {context.isExpanded ? (
+                <FontAwesomeIcon icon={faFolderOpen} size="lg" />
+              ) : (
+                <FontAwesomeIcon icon={faFolder} size="lg" />
+              )}
             </span>
           ) : null
         }
@@ -204,7 +202,10 @@ function FileTree({ initialData, setInitialData }: fileTreeProps) {
               {...context.interactiveElementProps}
               style={{ whiteSpace: "nowrap", cursor: "pointer", display: "flex", alignItems: "center" }}
             >
-              {item.isFolder ? context.isExpanded ? "" : "" : <FontAwesomeIcon icon={faFileAlt} />}
+              {!item.isFolder && (
+                <img src={getFileIconPath(item.data)} alt="File Icon" style={{ width: "20px", height: "20px" }} />
+              )}
+
               {arrow}
               {title}
             </span>

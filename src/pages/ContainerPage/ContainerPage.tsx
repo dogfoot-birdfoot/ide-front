@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import Sidebar from "../../components/sidebar/Sidebar"
-
 import Header from "../../components/header/Header"
 import ContainerEditModal from "@/components/modal/ContainerEditModal"
 import NewContainerModal from "@/components/modal/NewContainerModal"
@@ -145,8 +144,6 @@ const ContainerPage: React.FC = () => {
           }
         }}
       />
-
-      {/* 모달 추가 */}
     </div>
   )
 }

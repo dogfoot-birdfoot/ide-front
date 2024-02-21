@@ -1,23 +1,23 @@
-import React, { useState } from "react"
+import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faJava, faJsSquare, faPython, faCuttlefish } from "@fortawesome/free-brands-svg-icons"
-import { faPenToSquare, faTimes } from "@fortawesome/free-solid-svg-icons"
-import { faFileCode } from "@fortawesome/free-regular-svg-icons" // 기본 아이콘
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom"
 import { ContainerFormProps } from "type"
+import { toast } from "react-toastify"
+import DeleteNotification from "../sidebar/DeleteNotification"
 
 const getLanguageIcon = (language: string) => {
   switch (language) {
     case "Java":
-      return faJava
+      return "/java.png"
     case "JavaScript":
-      return faJsSquare
+      return "/js.png"
     case "Python":
-      return faPython
+      return "/python.png"
     case "C++":
-      return faCuttlefish // C++에 대한 아이콘으로 faCuttlefish 사용(실제 C++ 아이콘은 없음)
+      return "/cpp.png"
     default:
-      return faFileCode // 기본 아이콘
+      return "/file.png"
   }
 }
 
@@ -31,9 +31,17 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
   onEdit,
   onDelete
 }) => {
-  const languageIcon = getLanguageIcon(language)
   const navigation = useNavigate()
 
+  const handleDeleteClick = () => {
+    toast(<DeleteNotification onDelete={onDelete} id={id} />, {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: true,
+      draggable: false,
+      closeButton: false
+    })
+  }
   return (
     <div className="bg-white p-4 rounded-lg border border-slate-400 flex flex-col justify-between h-55 relative">
       <button onClick={onEdit} className="absolute top-4 right-12 text-gray-400 hover:text-gray-600">
@@ -41,15 +49,15 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
       </button>
 
       {/* 삭제 버튼에 onDelete 함수 연결, 버튼 위치 수정을 위해 right-4 사용 */}
-      <button onClick={() => onDelete(id)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-        <FontAwesomeIcon icon={faTimes} />
+      <button onClick={handleDeleteClick} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+        <FontAwesomeIcon icon={faTrash} />
       </button>
       <div>
         <div className="text-gray-800 font-bold text-xl mb-2">{name}</div>
         <p className="text-gray-600 text-base">#{number} 컨테이너</p>
         <div className="flex items-center text-gray-600 text-base">
-          <FontAwesomeIcon icon={languageIcon} className="mr-2" />
-          {language}
+          <img src={getLanguageIcon(language)} alt={`${language} Icon`} style={{ width: "20px", height: "20px" }} />
+          <p className="pl-2">{language}</p>
         </div>
         <p className="text-gray-600 text-sm">최근 수정: {lastModified}</p>
         <p className="text-gray-600 text-sm">설명: {description}</p> {/* 설명 추가 */}
@@ -66,6 +74,3 @@ const ContainerForm: React.FC<ContainerFormProps> = ({
 }
 
 export default ContainerForm
-// function setContainers(arg0: (prevContainers: any) => any) {
-//   throw new Error("Function not implemented.")
-// }

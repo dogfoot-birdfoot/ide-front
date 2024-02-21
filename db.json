@@ -3,20 +3,14 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": [
-        "uuid-folder1"
-      ],
+      "children": ["uuid-folder1"],
       "data": "Root Directory",
       "parentId": null
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": [
-        "uuid-file2",
-        "uuid-file1",
-        "uuid-file3"
-      ],
+      "children": ["uuid-file2", "uuid-file1", "uuid-file3"],
       "data": "First Folder",
       "parentId": "root"
     },
@@ -24,15 +18,15 @@
       "index": "uuid-file2",
       "isFolder": false,
       "children": [],
-      "data": "Second File",
-      "content": "import React from \"react\"\n\nconst ChatInputForm = () => {\n  const sendMessage = (e: any) => {\n    const textarea = document.getElementById(\"chatMessage\") as HTMLTextAreaElement\n    textarea.value = \"\"\n    e.preventDefault()\n  }\n\n  const pressEnter = (e: React.KeyboardEvent) => {\n    if (e.keyCode === 13 && e.shiftKey == false) {\n      if (!e.repeat) {\n        const textarea = document.getElementById(\"chatMessage\") as HTMLTextAreaElement\n        textarea.value = \"\"\n        // submit Event\n      }\n\n      e.preventDefault()\n    }\n  }\n\n  return (\n    <form className=\"flex justify-center items-center border-t h-1/6 pt-2 pb-2 h-20 border-gray-400\">\n      <textarea\n        id=\"chatMessage\"\n        onKeyDown={pressEnter}\n        className=\"border text-sm border-gray-400 w-5/6 h-full rounded-md break-words\"\n      ></textarea>\n      <button className=\"select-none ml-2 w-6 h-6 rounded-full bg-gray-300\" onClick={sendMessage}>\n        S\n      </button>\n    </form>\n  )\n}\n\nexport default ChatInputForm\n",
+      "data": "practice.java",
+      "content": "",
       "parentId": "uuid-folder1"
     },
     "uuid-file3": {
       "index": "uuid-file3",
       "isFolder": false,
       "children": [],
-      "data": "Third File",
+      "data": "test.py",
       "content": "Content of the third file inside the first folder.",
       "parentId": "uuid-folder1"
     },
@@ -40,9 +34,9 @@
       "index": "uuid-file1",
       "isFolder": false,
       "children": [],
-      "data": "First File",
-      "content": "Content of the first file inside the first folder.",
-      "parentId": "uuid-folder1"
+      "data": "index.js",
+      "content": "dddd",
+      "parentId": "root"
     }
   },
   "projects": [
