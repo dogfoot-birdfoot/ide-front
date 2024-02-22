@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react"
-import FileTree from "@/components/filetree/FileTree"
-import Editor from "@/components/editor/Editor"
-import ChatButton from "@/components/button/ChatButton"
-import { ActiveFileProvider, useActiveFile } from "../../context/ActiveFileContext"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
-import { FileStructureProvider, useFileStructure } from "context/FileStructureContext"
+import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
 import { toggleTreeVisible } from "@/pages/IDEPage/FileTreeSlice"
+
+/* Components */
+import FileTree from "@/components/filetree/FileTree"
+import Editor from "@/components/editor/Editor"
+import ChatButton from "@/components/button/ChatButton"
 import Loading from "@/components/editor/Loading"
-import axios from "axios"
-import { toast } from "react-toastify"
+import { ActiveFileProvider, useActiveFile } from "@/context/ActiveFileContext"
 import { getFileIconPath } from "@/components/renderingIcons/getFileIconPath"
 import TerminalComponent from "@/components/terminal/TerminalComponent"
+
+/* UI */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"
+import { FileStructureProvider, useFileStructure } from "context/FileStructureContext"
+import { toast } from "react-toastify"
 
 const IDEPage = () => {
   return (

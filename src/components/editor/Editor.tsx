@@ -1,15 +1,15 @@
 import React, { useEffect } from "react"
 import axios from "axios"
-
 import { EditorProps, Tab } from "type"
+
 import {
   cppCompletions,
   javaCompletions,
   javascriptCompletions,
   pythonCompletions
 } from "@/components/editor/autocomplete"
-import { useActiveFile } from "../../context/ActiveFileContext"
-import { useFileStructure } from "../../context/FileStructureContext"
+import { useActiveFile } from "@/context/ActiveFileContext"
+import { useFileStructure } from "@/context/FileStructureContext"
 
 /* Code Mirror */
 import CodeMirror from "@uiw/react-codemirror"
