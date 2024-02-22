@@ -1,15 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react"
 import axios from "axios"
 import { Tree, UncontrolledTreeEnvironment } from "react-complex-tree"
+import { ContextMenuState, fileTreeProps } from "type"
+
+/* Components */
+import ContextMenu from "@/components/filetree/ContextMenu"
+import CustomDataProvider from "@/components/filetree/CustomDataProvider"
+import NameModal from "@/components/modal/NameModal"
+import { getFileIconPath } from "@/components/renderingIcons/getFileIconPath"
+import { useFileStructure } from "@/context/FileStructureContext"
+import { useActiveFile } from "@/context/ActiveFileContext"
+
+/* UI */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileCirclePlus, faFloppyDisk, faFolder, faFolderOpen, faFolderPlus } from "@fortawesome/free-solid-svg-icons"
-import { useActiveFile } from "../../context/ActiveFileContext"
-import { ContextMenuState, fileTreeProps } from "type"
-import ContextMenu from "@/components/filetree/ContextMenu"
-import { useFileStructure } from "context/FileStructureContext"
-import CustomDataProvider from "@/components/filetree/CustomDataProvider"
-import NameModal from "../modal/NameModal"
-import { getFileIconPath } from "../renderingIcons/getFileIconPath"
 
 function FileTree({ initialData, setInitialData }: fileTreeProps) {
   const { setActiveFile, setActiveFileContent, addTab, tabs, activeFile, activeFileContent, removeTab } =

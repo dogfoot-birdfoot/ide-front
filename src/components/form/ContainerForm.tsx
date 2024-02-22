@@ -4,7 +4,8 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom"
 import { ContainerFormProps } from "type"
 import { toast } from "react-toastify"
-import DeleteNotification from "../sidebar/DeleteNotification"
+
+import DeleteNotification from "@/components/sidebar/DeleteNotification"
 
 const getLanguageIcon = (language: string) => {
   switch (language) {

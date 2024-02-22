@@ -1,11 +1,13 @@
 import React from "react"
-import CIcon from "@coreui/icons-react"
-import { cilCommentBubble } from "@coreui/icons"
-import ChatModal from "../modal/ChatModal"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store"
+
+import ChatModal from "@/components/modal/ChatModal"
 import { toggleChatButton } from "@/pages/IDEPage/ChatButtonSlice"
-import { useActiveFile } from "context/ActiveFileContext"
+import { useActiveFile } from "@/context/ActiveFileContext"
+
+import CIcon from "@coreui/icons-react"
+import { cilCommentBubble } from "@coreui/icons"
 
 const ChatButton = () => {
   const isModalOpened = useSelector((state: RootState) => state.chatButton.value)
