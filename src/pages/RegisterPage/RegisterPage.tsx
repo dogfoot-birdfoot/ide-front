@@ -15,7 +15,7 @@ const RegisterPage = () => {
             로그인
           </Link>
         </p>
-        <Link to={"/container"}> 컨테이너 페이지 접근하기</Link>
+        {/* <Link to={"/container"}> 컨테이너 페이지 접근하기</Link> */}
       </div>
     </div>
   )

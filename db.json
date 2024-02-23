@@ -3,14 +3,22 @@
     "root": {
       "index": "root",
       "isFolder": true,
-      "children": ["uuid-folder1"],
+      "children": [
+        "uuid-folder1",
+        "0.277398603645562",
+        "0.9434613278502886"
+      ],
       "data": "Root Directory",
       "parentId": null
     },
     "uuid-folder1": {
       "index": "uuid-folder1",
       "isFolder": true,
-      "children": ["uuid-file2", "uuid-file1", "uuid-file3"],
+      "children": [
+        "uuid-file2",
+        "uuid-file1",
+        "uuid-file3"
+      ],
       "data": "First Folder",
       "parentId": "root"
     },
@@ -19,7 +27,7 @@
       "isFolder": false,
       "children": [],
       "data": "practice.java",
-      "content": "",
+      "content": "public class HelloWorld {\n    public static void main(String[] args) {\n        // 화면에 \"Hello, World!\"를 출력합니다.\n        System.out.println(\"Hello, World!\");\n    }\n}\n",
       "parentId": "uuid-folder1"
     },
     "uuid-file3": {
@@ -27,7 +35,7 @@
       "isFolder": false,
       "children": [],
       "data": "test.py",
-      "content": "Content of the third file inside the first folder.",
+      "content": "def square_number(number):\n    \"\"\"주어진 숫자의 제곱을 반환합니다.\"\"\"\n    return number ** 2\n\n# 사용자로부터 숫자 입력 받기\nuser_input = input(\"숫자를 입력하세요: \")\nnumber = float(user_input)  # 입력 값을 부동소수점 숫자로 변환\n\n# 숫자의 제곱 계산\nresult = square_number(number)\n\n# 결과 출력\nprint(f\"{number}의 제곱은 {result}입니다.\")\n",
       "parentId": "uuid-folder1"
     },
     "uuid-file1": {
@@ -35,8 +43,26 @@
       "isFolder": false,
       "children": [],
       "data": "index.js",
-      "content": "dddd",
-      "parentId": "root"
+      "content": "function showWelcomeMessage() {\n        var userName = document.getElementById('userName').value;\n        var message = \"환영합니다, \" + userName + \"님!\";\n        document.getElementById('welcomeMessage').innerText = message;\n    }",
+      "parentId": "uuid-folder1"
+    },
+    "0.277398603645562": {
+      "data": "새로운파일.ts",
+      "index": "0.277398603645562",
+      "parentId": "root",
+      "children": [],
+      "isFolder": false,
+      "depth": null,
+      "content": ""
+    },
+    "0.9434613278502886": {
+      "data": "새로운폴더",
+      "index": "0.9434613278502886",
+      "parentId": "root",
+      "children": [],
+      "isFolder": true,
+      "depth": null,
+      "content": ""
     }
   },
   "projects": [
@@ -50,8 +76,8 @@
     },
     {
       "id": 2,
-      "name": "JavaScript 앱",
-      "language": "JavaScript",
+      "name": "파이썬",
+      "language": "Python",
       "description": "JavaScript로 만들어진 웹 애플리케이션.",
       "lastModified": "2024-02-05",
       "number": 2
