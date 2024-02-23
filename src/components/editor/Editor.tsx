@@ -93,6 +93,7 @@ const Editor: React.FC<EditorProps> = ({ data, content, initialData }) => {
           java(),
           closeBrackets(),
           search(), //control+f
+
           keymap.of([...completionKeymap, ...closeBracketsKeymap]),
           autocompletion({ override: [pythonCompletions, javaCompletions, cppCompletions, javascriptCompletions] }),
           keymap.of(completionKeymap)
